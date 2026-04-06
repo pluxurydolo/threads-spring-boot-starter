@@ -26,6 +26,6 @@ class ThreadsRefreshTokenSchedulerTests {
         when(threadsRefreshTokenSchedulerHandler.handle(anyString()))
             .thenReturn(Mono.just(""));
 
-        assertDoesNotThrow(() -> threadsRefreshTokenScheduler.refreshToken());
+        assertDoesNotThrow(threadsRefreshTokenScheduler::refreshToken);
     }
 }
