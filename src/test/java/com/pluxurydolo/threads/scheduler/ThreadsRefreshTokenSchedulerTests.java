@@ -22,10 +22,10 @@ class ThreadsRefreshTokenSchedulerTests {
     private ThreadsRefreshTokenScheduler threadsRefreshTokenScheduler;
 
     @Test
-    void testRefreshToken() {
+    void testSchedule() {
         when(threadsRefreshTokenSchedulerHandler.handle(anyString()))
             .thenReturn(Mono.just(""));
 
-        assertDoesNotThrow(threadsRefreshTokenScheduler::refreshToken);
+        assertDoesNotThrow(threadsRefreshTokenScheduler::schedule);
     }
 }
