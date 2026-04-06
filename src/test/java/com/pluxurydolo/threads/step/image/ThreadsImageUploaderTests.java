@@ -5,7 +5,7 @@ import com.pluxurydolo.threads.dto.request.upload.UploadMediaRequest;
 import com.pluxurydolo.threads.dto.response.CreateContainerResponse;
 import com.pluxurydolo.threads.dto.response.ErrorDetails;
 import com.pluxurydolo.threads.dto.response.PublishContainerResponse;
-import com.pluxurydolo.threads.exception.ThreadsImageSenderException;
+import com.pluxurydolo.threads.exception.ThreadsImageUploadException;
 import com.pluxurydolo.threads.properties.ThreadsProperties;
 import com.pluxurydolo.threads.security.token.AbstractTokensRetriever;
 import com.pluxurydolo.threads.step.ThreadsContainerPublisher;
@@ -74,7 +74,7 @@ class ThreadsImageUploaderTests {
         Mono<String> result = threadsImageUploader.upload(uploadMediaRequest());
 
         create(result)
-            .expectError(ThreadsImageSenderException.class)
+            .expectError(ThreadsImageUploadException.class)
             .verify();
     }
 

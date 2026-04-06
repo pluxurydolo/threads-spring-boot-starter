@@ -7,7 +7,7 @@ import com.pluxurydolo.threads.dto.request.upload.PublishContainerRequest;
 import com.pluxurydolo.threads.dto.request.upload.UploadMediaRequest;
 import com.pluxurydolo.threads.dto.response.CreateContainerResponse;
 import com.pluxurydolo.threads.dto.response.PublishContainerResponse;
-import com.pluxurydolo.threads.exception.ThreadsImageSenderException;
+import com.pluxurydolo.threads.exception.ThreadsImageUploadException;
 import com.pluxurydolo.threads.properties.ThreadsProperties;
 import com.pluxurydolo.threads.security.token.AbstractTokensRetriever;
 import com.pluxurydolo.threads.step.ThreadsContainerPublisher;
@@ -49,7 +49,10 @@ public class ThreadsImageUploader {
             .flatMap(accessToken -> uploadImage(imageUrl, caption, userId, accessToken))
             .map(PublishContainerResponse::id)
             .doOnSuccess(_ -> LOGGER.info("zujy [threads-starter] Изображение успешно опубликовано"))
-            .onErrorResume(throwable -> Mono.error(new ThreadsImageSenderException(throwable)));
+            .onErrorResume(throwable -> {
+                LOGGER.error("hlyy [threads-starter] Произошла ошибка при публикации изображения");
+                return Mono.error(new ThreadsImageUploadException(throwable));
+            });
     }
 
     private Mono<PublishContainerResponse> uploadImage(String imageUrl, String caption, String userId, String accessToken) {

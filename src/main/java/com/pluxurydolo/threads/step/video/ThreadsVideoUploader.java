@@ -7,7 +7,7 @@ import com.pluxurydolo.threads.dto.request.upload.PublishContainerRequest;
 import com.pluxurydolo.threads.dto.request.upload.UploadMediaRequest;
 import com.pluxurydolo.threads.dto.response.CreateContainerResponse;
 import com.pluxurydolo.threads.dto.response.PublishContainerResponse;
-import com.pluxurydolo.threads.exception.VideoSenderException;
+import com.pluxurydolo.threads.exception.ThreadsVideoUploadException;
 import com.pluxurydolo.threads.properties.ThreadsProperties;
 import com.pluxurydolo.threads.security.token.AbstractTokensRetriever;
 import com.pluxurydolo.threads.step.ThreadsContainerPublisher;
@@ -49,7 +49,10 @@ public class ThreadsVideoUploader {
             .flatMap(accessToken -> uploadVideo(videoUrl, caption, userId, accessToken))
             .map(PublishContainerResponse::id)
             .doOnSuccess(_ -> LOGGER.info("qnoh [threads-starter] Видео успешно опубликовано"))
-            .onErrorResume(throwable -> Mono.error(new VideoSenderException(throwable)));
+            .onErrorResume(throwable -> {
+                LOGGER.error("uhgv [threads-starter] Произошла ошибка при публикации видео");
+                return Mono.error(new ThreadsVideoUploadException(throwable));
+            });
     }
 
     private Mono<PublishContainerResponse> uploadVideo(String videoUrl, String caption, String userId, String accessToken) {
