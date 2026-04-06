@@ -2,6 +2,7 @@ package com.pluxurydolo.threads.web;
 
 import com.pluxurydolo.threads.dto.request.security.AccessTokenRequest;
 import com.pluxurydolo.threads.dto.request.security.ExchangeTokenRequest;
+import com.pluxurydolo.threads.dto.request.security.RefreshTokenRequest;
 import com.pluxurydolo.threads.dto.response.TokenResponse;
 import com.pluxurydolo.threads.exception.ThreadsAccessTokenFlowException;
 import com.pluxurydolo.threads.exception.ThreadsExchangeTokenFlowException;
@@ -63,6 +64,25 @@ public class ThreadsApiWebClient {
             .doOnSuccess(_ -> LOGGER.info("spus [threads-starter] Access token успешно получен"))
             .onErrorResume(throwable -> {
                 LOGGER.error("xrqc [threads-starter] Произошла ошибка при получении access token");
+                return Mono.error(new ThreadsAccessTokenFlowException(throwable));
+            });
+    }
+
+    public Mono<TokenResponse> refreshToken(RefreshTokenRequest request) {
+        String accessToken = request.accessToken();
+
+        return webClient.get()
+            .uri(uriBuilder -> uriBuilder
+                .path("/refresh_access_token")
+                .queryParam("grant_type", "th_refresh_token")
+                .queryParam("access_token", accessToken)
+                .build()
+            )
+            .retrieve()
+            .bodyToMono(TokenResponse.class)
+            .doOnSuccess(_ -> LOGGER.info("xntj [threads-starter] Access token успешно обновлен"))
+            .onErrorResume(throwable -> {
+                LOGGER.error("enir [threads-starter] Произошла ошибка при обновлении access token");
                 return Mono.error(new ThreadsAccessTokenFlowException(throwable));
             });
     }

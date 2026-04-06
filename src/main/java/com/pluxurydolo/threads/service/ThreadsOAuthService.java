@@ -56,7 +56,7 @@ public class ThreadsOAuthService {
 
     public Mono<String> refreshToken() {
         return abstractTokensRetriever.retrieve()
-            .map(Tokens::exchangeToken)
+            .map(Tokens::accessToken)
             .flatMap(threadsRefreshTokenFlow::refreshToken)
             .subscribeOn(Schedulers.boundedElastic());
     }

@@ -36,7 +36,10 @@ public class ThreadsOAuthConfiguration {
     }
 
     @Bean
-    public ThreadsRefreshTokenFlow threadsRefreshTokenFlow(ThreadsAccessTokenFlow threadsAccessTokenFlow) {
-        return new ThreadsRefreshTokenFlow(threadsAccessTokenFlow);
+    public ThreadsRefreshTokenFlow threadsRefreshTokenFlow(
+        ThreadsApiWebClient threadsApiWebClient,
+        AbstractTokensSaver abstractTokensSaver
+    ) {
+        return new ThreadsRefreshTokenFlow(threadsApiWebClient, abstractTokensSaver);
     }
 }
