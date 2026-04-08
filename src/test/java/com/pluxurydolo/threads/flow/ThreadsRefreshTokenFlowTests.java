@@ -1,8 +1,7 @@
-package com.pluxurydolo.threads.security.flow;
+package com.pluxurydolo.threads.flow;
 
 import com.pluxurydolo.threads.dto.response.TokenResponse;
-import com.pluxurydolo.threads.properties.ThreadsProperties;
-import com.pluxurydolo.threads.security.token.AbstractTokensSaver;
+import com.pluxurydolo.threads.token.AbstractTokenSaver;
 import com.pluxurydolo.threads.web.ThreadsApiWebClient;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,32 +16,25 @@ import static org.mockito.Mockito.when;
 import static reactor.test.StepVerifier.create;
 
 @ExtendWith(MockitoExtension.class)
-class ThreadsAccessTokenFlowTests {
-
-    @Mock
-    private ThreadsProperties threadsProperties;
+class ThreadsRefreshTokenFlowTests {
 
     @Mock
     private ThreadsApiWebClient threadsApiWebClient;
 
     @Mock
-    private AbstractTokensSaver abstractTokensSaver;
+    private AbstractTokenSaver abstractTokenSaver;
 
     @InjectMocks
-    private ThreadsAccessTokenFlow threadsAccessTokenFlow;
+    private ThreadsRefreshTokenFlow threadsRefreshTokenFlow;
 
     @Test
-    void testGetToken() {
-        when(threadsProperties.appId())
-            .thenReturn("appId");
-        when(threadsProperties.appSecret())
-            .thenReturn("appSecret");
-        when(threadsApiWebClient.getAccessToken(any()))
+    void testRefreshToken() {
+        when(threadsApiWebClient.refreshToken(any()))
             .thenReturn(Mono.just(tokenResponse()));
-        when(abstractTokensSaver.save(any(), anyString()))
+        when(abstractTokenSaver.save(any(), anyString()))
             .thenReturn(Mono.just(""));
 
-        Mono<String> result = threadsAccessTokenFlow.getToken("exchangeToken");
+        Mono<String> result = threadsRefreshTokenFlow.refreshToken("currentToken");
 
         create(result)
             .expectNext("")
@@ -50,15 +42,11 @@ class ThreadsAccessTokenFlowTests {
     }
 
     @Test
-    void testGetTokenWhenExceptionOccurred() {
-        when(threadsProperties.appId())
-            .thenReturn("appId");
-        when(threadsProperties.appSecret())
-            .thenReturn("appSecret");
-        when(threadsApiWebClient.getAccessToken(any()))
+    void testRefreshTokenWhenExceptionOccurred() {
+        when(threadsApiWebClient.refreshToken(any()))
             .thenReturn(Mono.error(new RuntimeException()));
 
-        Mono<String> result = threadsAccessTokenFlow.getToken("exchangeToken");
+        Mono<String> result = threadsRefreshTokenFlow.refreshToken("currentToken");
 
         create(result)
             .expectError(RuntimeException.class)

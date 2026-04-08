@@ -2,11 +2,11 @@ package com.pluxurydolo.threads.service;
 
 import com.pluxurydolo.threads.dto.Tokens;
 import com.pluxurydolo.threads.dto.response.TokenResponse;
-import com.pluxurydolo.threads.security.flow.ThreadsAccessTokenFlow;
-import com.pluxurydolo.threads.security.flow.ThreadsAuthorizationCodeFlow;
-import com.pluxurydolo.threads.security.flow.ThreadsExchangeTokenFlow;
-import com.pluxurydolo.threads.security.flow.ThreadsRefreshTokenFlow;
-import com.pluxurydolo.threads.security.token.AbstractTokensRetriever;
+import com.pluxurydolo.threads.flow.ThreadsAccessTokenFlow;
+import com.pluxurydolo.threads.flow.ThreadsAuthorizationCodeFlow;
+import com.pluxurydolo.threads.flow.ThreadsExchangeTokenFlow;
+import com.pluxurydolo.threads.flow.ThreadsRefreshTokenFlow;
+import com.pluxurydolo.threads.token.AbstractTokenRetriever;
 import org.springframework.http.ResponseEntity;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
@@ -20,20 +20,20 @@ public class ThreadsOAuthService {
     private final ThreadsExchangeTokenFlow threadsExchangeTokenFlow;
     private final ThreadsAccessTokenFlow threadsAccessTokenFlow;
     private final ThreadsRefreshTokenFlow  threadsRefreshTokenFlow;
-    private final AbstractTokensRetriever abstractTokensRetriever;
+    private final AbstractTokenRetriever abstractTokenRetriever;
 
     public ThreadsOAuthService(
         ThreadsAuthorizationCodeFlow threadsAuthorizationCodeFlow,
         ThreadsExchangeTokenFlow threadsExchangeTokenFlow,
         ThreadsAccessTokenFlow threadsAccessTokenFlow,
         ThreadsRefreshTokenFlow threadsRefreshTokenFlow,
-        AbstractTokensRetriever abstractTokensRetriever
+        AbstractTokenRetriever abstractTokenRetriever
     ) {
         this.threadsAuthorizationCodeFlow = threadsAuthorizationCodeFlow;
         this.threadsExchangeTokenFlow = threadsExchangeTokenFlow;
         this.threadsAccessTokenFlow = threadsAccessTokenFlow;
         this.threadsRefreshTokenFlow = threadsRefreshTokenFlow;
-        this.abstractTokensRetriever = abstractTokensRetriever;
+        this.abstractTokenRetriever = abstractTokenRetriever;
     }
 
     public Mono<ResponseEntity<Void>> login() {
@@ -55,7 +55,7 @@ public class ThreadsOAuthService {
     }
 
     public Mono<String> refreshToken() {
-        return abstractTokensRetriever.retrieve()
+        return abstractTokenRetriever.retrieve()
             .map(Tokens::accessToken)
             .flatMap(threadsRefreshTokenFlow::refreshToken)
             .subscribeOn(Schedulers.boundedElastic());

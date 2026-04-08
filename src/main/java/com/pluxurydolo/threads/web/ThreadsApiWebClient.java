@@ -1,8 +1,8 @@
 package com.pluxurydolo.threads.web;
 
-import com.pluxurydolo.threads.dto.request.security.AccessTokenRequest;
-import com.pluxurydolo.threads.dto.request.security.ExchangeTokenRequest;
-import com.pluxurydolo.threads.dto.request.security.RefreshTokenRequest;
+import com.pluxurydolo.threads.dto.request.token.AccessTokenRequest;
+import com.pluxurydolo.threads.dto.request.token.ExchangeTokenRequest;
+import com.pluxurydolo.threads.dto.request.token.RefreshTokenRequest;
 import com.pluxurydolo.threads.dto.response.TokenResponse;
 import com.pluxurydolo.threads.exception.ThreadsAccessTokenFlowException;
 import com.pluxurydolo.threads.exception.ThreadsExchangeTokenFlowException;

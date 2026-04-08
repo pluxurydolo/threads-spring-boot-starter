@@ -9,7 +9,7 @@ import com.pluxurydolo.threads.dto.response.CreateContainerResponse;
 import com.pluxurydolo.threads.dto.response.PublishContainerResponse;
 import com.pluxurydolo.threads.exception.ThreadsImageUploadException;
 import com.pluxurydolo.threads.properties.ThreadsProperties;
-import com.pluxurydolo.threads.security.token.AbstractTokensRetriever;
+import com.pluxurydolo.threads.token.AbstractTokenRetriever;
 import com.pluxurydolo.threads.step.ThreadsContainerPublisher;
 import com.pluxurydolo.threads.step.ThreadsContainerStatusPoller;
 import org.slf4j.Logger;
@@ -22,20 +22,20 @@ public class ThreadsImageUploader {
     private final ThreadsImageContainerCreator threadsImageContainerCreator;
     private final ThreadsContainerStatusPoller threadsContainerStatusPoller;
     private final ThreadsContainerPublisher threadsContainerPublisher;
-    private final AbstractTokensRetriever abstractTokensRetriever;
+    private final AbstractTokenRetriever abstractTokenRetriever;
     private final ThreadsProperties threadsProperties;
 
     public ThreadsImageUploader(
         ThreadsImageContainerCreator threadsImageContainerCreator,
         ThreadsContainerStatusPoller threadsContainerStatusPoller,
         ThreadsContainerPublisher threadsContainerPublisher,
-        AbstractTokensRetriever abstractTokensRetriever,
+        AbstractTokenRetriever abstractTokenRetriever,
         ThreadsProperties threadsProperties
     ) {
         this.threadsImageContainerCreator = threadsImageContainerCreator;
         this.threadsContainerStatusPoller = threadsContainerStatusPoller;
         this.threadsContainerPublisher = threadsContainerPublisher;
-        this.abstractTokensRetriever = abstractTokensRetriever;
+        this.abstractTokenRetriever = abstractTokenRetriever;
         this.threadsProperties = threadsProperties;
     }
 
@@ -44,7 +44,7 @@ public class ThreadsImageUploader {
         String caption = request.caption();
         String userId = threadsProperties.userId();
 
-        return abstractTokensRetriever.retrieve()
+        return abstractTokenRetriever.retrieve()
             .map(Tokens::accessToken)
             .flatMap(accessToken -> uploadImage(imageUrl, caption, userId, accessToken))
             .map(PublishContainerResponse::id)

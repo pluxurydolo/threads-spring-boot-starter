@@ -1,11 +1,11 @@
 package com.pluxurydolo.threads.config;
 
 import com.pluxurydolo.threads.controller.ThreadsOAuthController;
-import com.pluxurydolo.threads.security.flow.ThreadsAccessTokenFlow;
-import com.pluxurydolo.threads.security.flow.ThreadsAuthorizationCodeFlow;
-import com.pluxurydolo.threads.security.flow.ThreadsExchangeTokenFlow;
-import com.pluxurydolo.threads.security.flow.ThreadsRefreshTokenFlow;
-import com.pluxurydolo.threads.security.token.AbstractTokensRetriever;
+import com.pluxurydolo.threads.flow.ThreadsAccessTokenFlow;
+import com.pluxurydolo.threads.flow.ThreadsAuthorizationCodeFlow;
+import com.pluxurydolo.threads.flow.ThreadsExchangeTokenFlow;
+import com.pluxurydolo.threads.flow.ThreadsRefreshTokenFlow;
+import com.pluxurydolo.threads.token.AbstractTokenRetriever;
 import com.pluxurydolo.threads.service.ThreadsOAuthService;
 import com.pluxurydolo.threads.web.ThreadsApiWebClient;
 import com.pluxurydolo.threads.web.ThreadsUploadWebClient;
@@ -26,14 +26,14 @@ public class ThreadsWebConfiguration {
         ThreadsExchangeTokenFlow threadsExchangeTokenFlow,
         ThreadsAccessTokenFlow threadsAccessTokenFlow,
         ThreadsRefreshTokenFlow threadsRefreshTokenFlow,
-        AbstractTokensRetriever abstractTokensRetriever
+        AbstractTokenRetriever abstractTokenRetriever
     ) {
         return new ThreadsOAuthService(
             threadsAuthorizationCodeFlow,
             threadsExchangeTokenFlow,
             threadsAccessTokenFlow,
             threadsRefreshTokenFlow,
-            abstractTokensRetriever
+            abstractTokenRetriever
         );
     }
 

@@ -1,11 +1,11 @@
 package com.pluxurydolo.threads.config;
 
 import com.pluxurydolo.threads.properties.ThreadsProperties;
-import com.pluxurydolo.threads.security.flow.ThreadsAccessTokenFlow;
-import com.pluxurydolo.threads.security.flow.ThreadsAuthorizationCodeFlow;
-import com.pluxurydolo.threads.security.flow.ThreadsExchangeTokenFlow;
-import com.pluxurydolo.threads.security.flow.ThreadsRefreshTokenFlow;
-import com.pluxurydolo.threads.security.token.AbstractTokensSaver;
+import com.pluxurydolo.threads.flow.ThreadsAccessTokenFlow;
+import com.pluxurydolo.threads.flow.ThreadsAuthorizationCodeFlow;
+import com.pluxurydolo.threads.flow.ThreadsExchangeTokenFlow;
+import com.pluxurydolo.threads.flow.ThreadsRefreshTokenFlow;
+import com.pluxurydolo.threads.token.AbstractTokenSaver;
 import com.pluxurydolo.threads.web.ThreadsApiWebClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,16 +30,16 @@ public class ThreadsOAuthConfiguration {
     public ThreadsAccessTokenFlow threadsAccessTokenFlow(
         ThreadsProperties threadsProperties,
         ThreadsApiWebClient threadsApiWebClient,
-        AbstractTokensSaver abstractTokensSaver
+        AbstractTokenSaver abstractTokenSaver
     ) {
-        return new ThreadsAccessTokenFlow(threadsProperties, threadsApiWebClient, abstractTokensSaver);
+        return new ThreadsAccessTokenFlow(threadsProperties, threadsApiWebClient, abstractTokenSaver);
     }
 
     @Bean
     public ThreadsRefreshTokenFlow threadsRefreshTokenFlow(
         ThreadsApiWebClient threadsApiWebClient,
-        AbstractTokensSaver abstractTokensSaver
+        AbstractTokenSaver abstractTokenSaver
     ) {
-        return new ThreadsRefreshTokenFlow(threadsApiWebClient, abstractTokensSaver);
+        return new ThreadsRefreshTokenFlow(threadsApiWebClient, abstractTokenSaver);
     }
 }

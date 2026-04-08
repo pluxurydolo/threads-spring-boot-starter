@@ -2,11 +2,11 @@ package com.pluxurydolo.threads.service;
 
 import com.pluxurydolo.threads.dto.Tokens;
 import com.pluxurydolo.threads.dto.response.TokenResponse;
-import com.pluxurydolo.threads.security.flow.ThreadsAccessTokenFlow;
-import com.pluxurydolo.threads.security.flow.ThreadsAuthorizationCodeFlow;
-import com.pluxurydolo.threads.security.flow.ThreadsExchangeTokenFlow;
-import com.pluxurydolo.threads.security.flow.ThreadsRefreshTokenFlow;
-import com.pluxurydolo.threads.security.token.AbstractTokensRetriever;
+import com.pluxurydolo.threads.flow.ThreadsAccessTokenFlow;
+import com.pluxurydolo.threads.flow.ThreadsAuthorizationCodeFlow;
+import com.pluxurydolo.threads.flow.ThreadsExchangeTokenFlow;
+import com.pluxurydolo.threads.flow.ThreadsRefreshTokenFlow;
+import com.pluxurydolo.threads.token.AbstractTokenRetriever;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -38,7 +38,7 @@ class ThreadsOAuthServiceTests {
     private ThreadsRefreshTokenFlow threadsRefreshTokenFlow;
 
     @Mock
-    private AbstractTokensRetriever abstractTokensRetriever;
+    private AbstractTokenRetriever abstractTokenRetriever;
 
     @InjectMocks
     private ThreadsOAuthService threadsOAuthService;
@@ -72,7 +72,7 @@ class ThreadsOAuthServiceTests {
 
     @Test
     void testRefreshToken() {
-        when(abstractTokensRetriever.retrieve())
+        when(abstractTokenRetriever.retrieve())
             .thenReturn(Mono.just(tokens()));
         when(threadsRefreshTokenFlow.refreshToken(anyString()))
             .thenReturn(Mono.just(""));

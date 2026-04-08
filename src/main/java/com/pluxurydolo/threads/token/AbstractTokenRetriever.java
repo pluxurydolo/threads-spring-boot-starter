@@ -1,14 +1,14 @@
-package com.pluxurydolo.threads.security.token;
+package com.pluxurydolo.threads.token;
 
 import com.pluxurydolo.threads.dto.Tokens;
 import reactor.core.publisher.Mono;
 
 import java.util.Map;
 
-public abstract class AbstractTokensRetriever {
+public abstract class AbstractTokenRetriever {
     public Mono<Tokens> retrieve() {
         return retrieveTokens()
-            .map(AbstractTokensRetriever::mapToTokens);
+            .map(AbstractTokenRetriever::mapToTokens);
     }
 
     private static Tokens mapToTokens(Map<String, String> tokens) {

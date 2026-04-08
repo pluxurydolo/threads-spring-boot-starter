@@ -2,8 +2,8 @@ package com.pluxurydolo.threads.scheduler.handler;
 
 import com.pluxurydolo.threads.dto.Tokens;
 import com.pluxurydolo.threads.scheduler.hook.RefreshTokenSchedulerHandlerHook;
-import com.pluxurydolo.threads.security.flow.ThreadsRefreshTokenFlow;
-import com.pluxurydolo.threads.security.token.AbstractTokensRetriever;
+import com.pluxurydolo.threads.flow.ThreadsRefreshTokenFlow;
+import com.pluxurydolo.threads.token.AbstractTokenRetriever;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -23,7 +23,7 @@ class ThreadsRefreshTokenSchedulerHandlerTests {
     private ThreadsRefreshTokenFlow threadsRefreshTokenFlow;
 
     @Mock
-    private AbstractTokensRetriever abstractTokensRetriever;
+    private AbstractTokenRetriever abstractTokenRetriever;
 
     @Mock
     private RefreshTokenSchedulerHandlerHook refreshTokenSchedulerHandlerHook;
@@ -33,7 +33,7 @@ class ThreadsRefreshTokenSchedulerHandlerTests {
 
     @Test
     void testHandle() {
-        when(abstractTokensRetriever.retrieve())
+        when(abstractTokenRetriever.retrieve())
             .thenReturn(Mono.just(tokens()));
         when(threadsRefreshTokenFlow.refreshToken(anyString()))
             .thenReturn(Mono.just(""));
@@ -49,7 +49,7 @@ class ThreadsRefreshTokenSchedulerHandlerTests {
 
     @Test
     void testHandleWhenExceptionOccurred() {
-        when(abstractTokensRetriever.retrieve())
+        when(abstractTokenRetriever.retrieve())
             .thenReturn(Mono.just(tokens()));
         when(threadsRefreshTokenFlow.refreshToken(anyString()))
             .thenReturn(Mono.error(new RuntimeException()));

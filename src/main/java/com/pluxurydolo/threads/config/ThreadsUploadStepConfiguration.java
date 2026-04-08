@@ -2,7 +2,7 @@ package com.pluxurydolo.threads.config;
 
 import com.pluxurydolo.threads.properties.PollingProperties;
 import com.pluxurydolo.threads.properties.ThreadsProperties;
-import com.pluxurydolo.threads.security.token.AbstractTokensRetriever;
+import com.pluxurydolo.threads.token.AbstractTokenRetriever;
 import com.pluxurydolo.threads.step.ThreadsContainerPublisher;
 import com.pluxurydolo.threads.step.ThreadsContainerStatusPoller;
 import com.pluxurydolo.threads.step.image.ThreadsImageContainerCreator;
@@ -21,14 +21,14 @@ public class ThreadsUploadStepConfiguration {
         ThreadsImageContainerCreator threadsImageContainerCreator,
         ThreadsContainerStatusPoller threadsContainerStatusPoller,
         ThreadsContainerPublisher threadsContainerPublisher,
-        AbstractTokensRetriever abstractTokensRetriever,
+        AbstractTokenRetriever abstractTokenRetriever,
         ThreadsProperties threadsProperties
     ) {
         return new ThreadsImageUploader(
             threadsImageContainerCreator,
             threadsContainerStatusPoller,
             threadsContainerPublisher,
-            abstractTokensRetriever,
+            abstractTokenRetriever,
             threadsProperties
         );
     }
@@ -38,14 +38,14 @@ public class ThreadsUploadStepConfiguration {
         ThreadsVideoContainerCreator threadsVideoContainerCreator,
         ThreadsContainerStatusPoller threadsContainerStatusPoller,
         ThreadsContainerPublisher threadsContainerPublisher,
-        AbstractTokensRetriever abstractTokensRetriever,
+        AbstractTokenRetriever abstractTokenRetriever,
         ThreadsProperties threadsProperties
     ) {
         return new ThreadsVideoUploader(
             threadsVideoContainerCreator,
             threadsContainerStatusPoller,
             threadsContainerPublisher,
-            abstractTokensRetriever,
+            abstractTokenRetriever,
             threadsProperties
         );
     }

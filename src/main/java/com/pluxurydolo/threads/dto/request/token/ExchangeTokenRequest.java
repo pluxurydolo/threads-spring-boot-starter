@@ -1,4 +1,4 @@
-package com.pluxurydolo.threads.dto.request.security;
+package com.pluxurydolo.threads.dto.request.token;
 
 public record ExchangeTokenRequest(
     String appId,

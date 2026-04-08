@@ -7,7 +7,7 @@ import com.pluxurydolo.threads.dto.response.ErrorDetails;
 import com.pluxurydolo.threads.dto.response.PublishContainerResponse;
 import com.pluxurydolo.threads.exception.ThreadsVideoUploadException;
 import com.pluxurydolo.threads.properties.ThreadsProperties;
-import com.pluxurydolo.threads.security.token.AbstractTokensRetriever;
+import com.pluxurydolo.threads.token.AbstractTokenRetriever;
 import com.pluxurydolo.threads.step.ThreadsContainerPublisher;
 import com.pluxurydolo.threads.step.ThreadsContainerStatusPoller;
 import org.junit.jupiter.api.Test;
@@ -34,7 +34,7 @@ class ThreadsVideoUploaderTests {
     private ThreadsContainerPublisher threadsContainerPublisher;
 
     @Mock
-    private AbstractTokensRetriever abstractTokensRetriever;
+    private AbstractTokenRetriever abstractTokenRetriever;
 
     @Mock
     private ThreadsProperties threadsProperties;
@@ -46,7 +46,7 @@ class ThreadsVideoUploaderTests {
     void testUpload() {
         when(threadsProperties.userId())
             .thenReturn("userId");
-        when(abstractTokensRetriever.retrieve())
+        when(abstractTokenRetriever.retrieve())
             .thenReturn(Mono.just(tokens()));
         when(threadsVideoContainerCreator.create(any()))
             .thenReturn(Mono.just(createContainerResponse()));
@@ -66,7 +66,7 @@ class ThreadsVideoUploaderTests {
     void testUploadWhenExceptionOccurred() {
         when(threadsProperties.userId())
             .thenReturn("userId");
-        when(abstractTokensRetriever.retrieve())
+        when(abstractTokenRetriever.retrieve())
             .thenReturn(Mono.error(new RuntimeException()));
 
         Mono<String> result = threadsVideoUploader.upload(uploadMediaRequest());

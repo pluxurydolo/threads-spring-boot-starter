@@ -18,7 +18,8 @@ import org.springframework.context.annotation.Import;
     ThreadsWebConfiguration.class,
     ThreadsClientConfiguration.class,
     ThreadsUploadStepConfiguration.class,
-    ThreadsSchedulingConfiguration.class
+    ThreadsSchedulingConfiguration.class,
+    ThreadsFilterConfiguration.class
 })
 public class ThreadsAutoConfiguration {
 }

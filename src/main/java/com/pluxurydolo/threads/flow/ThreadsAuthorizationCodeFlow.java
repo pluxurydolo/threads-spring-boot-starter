@@ -1,4 +1,4 @@
-package com.pluxurydolo.threads.security.flow;
+package com.pluxurydolo.threads.flow;
 
 import com.pluxurydolo.threads.properties.ThreadsProperties;
 

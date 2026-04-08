@@ -1,6 +1,6 @@
-package com.pluxurydolo.threads.security.flow;
+package com.pluxurydolo.threads.flow;
 
-import com.pluxurydolo.threads.dto.request.security.ExchangeTokenRequest;
+import com.pluxurydolo.threads.dto.request.token.ExchangeTokenRequest;
 import com.pluxurydolo.threads.dto.response.TokenResponse;
 import com.pluxurydolo.threads.properties.ThreadsProperties;
 import com.pluxurydolo.threads.web.ThreadsApiWebClient;
