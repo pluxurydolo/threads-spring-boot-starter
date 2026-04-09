@@ -7,19 +7,21 @@ import com.pluxurydolo.threads.flow.ThreadsAuthorizationCodeFlow;
 import com.pluxurydolo.threads.flow.ThreadsExchangeTokenFlow;
 import com.pluxurydolo.threads.flow.ThreadsRefreshTokenFlow;
 import com.pluxurydolo.threads.token.AbstractTokenRetriever;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.server.reactive.ServerHttpResponse;
+import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
 import java.net.URI;
 
+import static java.net.URI.create;
 import static org.springframework.http.HttpStatus.FOUND;
 
 public class ThreadsOAuthService {
     private final ThreadsAuthorizationCodeFlow threadsAuthorizationCodeFlow;
     private final ThreadsExchangeTokenFlow threadsExchangeTokenFlow;
     private final ThreadsAccessTokenFlow threadsAccessTokenFlow;
-    private final ThreadsRefreshTokenFlow  threadsRefreshTokenFlow;
+    private final ThreadsRefreshTokenFlow threadsRefreshTokenFlow;
     private final AbstractTokenRetriever abstractTokenRetriever;
 
     public ThreadsOAuthService(
@@ -36,15 +38,15 @@ public class ThreadsOAuthService {
         this.abstractTokenRetriever = abstractTokenRetriever;
     }
 
-    public Mono<ResponseEntity<Void>> login() {
-        String authUrl = threadsAuthorizationCodeFlow.getAuthorizationUrl();
-        URI uri = URI.create(authUrl);
+    public Mono<Void> login(ServerWebExchange serverWebExchange) {
+        String authorizationUrl = threadsAuthorizationCodeFlow.getAuthorizationUrl();
+        URI uri = create(authorizationUrl);
 
-        ResponseEntity<Void> responseEntity = ResponseEntity.status(FOUND)
-            .location(uri)
-            .build();
+        ServerHttpResponse response = serverWebExchange.getResponse();
+        response.setStatusCode(FOUND);
+        response.getHeaders().setLocation(uri);
 
-        return Mono.just(responseEntity);
+        return response.setComplete();
     }
 
     public Mono<String> callback(String code) {

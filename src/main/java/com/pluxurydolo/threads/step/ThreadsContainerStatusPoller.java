@@ -2,7 +2,7 @@ package com.pluxurydolo.threads.step;
 
 import com.pluxurydolo.threads.dto.request.upload.ContainerStatusRequest;
 import com.pluxurydolo.threads.dto.response.ContainerStatusResponse;
-import com.pluxurydolo.threads.properties.PollingProperties;
+import com.pluxurydolo.threads.properties.ThreadsPollingProperties;
 import com.pluxurydolo.threads.web.ThreadsUploadWebClient;
 import org.reactivestreams.Publisher;
 import org.slf4j.Logger;
@@ -18,23 +18,20 @@ public class ThreadsContainerStatusPoller {
     private static final Logger LOGGER = LoggerFactory.getLogger(ThreadsContainerStatusPoller.class);
 
     private final ThreadsUploadWebClient threadsUploadWebClient;
-    private final PollingProperties pollingProperties;
+    private final ThreadsPollingProperties threadsPollingProperties;
 
     public ThreadsContainerStatusPoller(
         ThreadsUploadWebClient threadsUploadWebClient,
-        PollingProperties pollingProperties
+        ThreadsPollingProperties threadsPollingProperties
     ) {
         this.threadsUploadWebClient = threadsUploadWebClient;
-        this.pollingProperties = pollingProperties;
+        this.threadsPollingProperties = threadsPollingProperties;
     }
 
     public Mono<String> poll(ContainerStatusRequest request) {
-        Duration delay = pollingProperties.delay();
+        Duration delay = threadsPollingProperties.delay();
         long delaySeconds = delay.getSeconds();
-        int maxRepeat = pollingProperties.maxRepeat();
-
-        String containerId = request.containerId();
-        String accessToken = request.accessToken();
+        int maxRepeat = threadsPollingProperties.maxRepeat();
 
         Function<Flux<Long>, Publisher<?>> onRepeat = repeat -> repeat
             .doOnNext(repeatNum -> LOGGER.info(
@@ -43,12 +40,12 @@ public class ThreadsContainerStatusPoller {
             ))
             .delayElements(delay, Schedulers.boundedElastic());
 
-        return Mono.defer(() -> validateContainerStatus(containerId, accessToken))
+        return Mono.defer(() -> validateContainerStatus(request))
             .repeatWhenEmpty(maxRepeat, onRepeat);
     }
 
-    private Mono<String> validateContainerStatus(String containerId, String accessToken) {
-        return threadsUploadWebClient.getContainerStatus(containerId, accessToken)
+    private Mono<String> validateContainerStatus(ContainerStatusRequest request) {
+        return threadsUploadWebClient.getContainerStatus(request)
             .map(ContainerStatusResponse::status)
             .doOnNext(status -> LOGGER.info("hnlr [threads-starter] Статус контейнера: {}", status))
             .filter("FINISHED"::equals);

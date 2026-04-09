@@ -2,39 +2,46 @@ package com.pluxurydolo.threads.controller;
 
 import com.pluxurydolo.threads.service.ThreadsOAuthService;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.ResponseEntity;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
-import java.net.URI;
-
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.springframework.http.HttpStatus.FOUND;
 import static reactor.test.StepVerifier.create;
 
+@ExtendWith(MockitoExtension.class)
 class ThreadsOAuthControllerTests {
-    private static final ThreadsOAuthService OAUTH_SERVICE = mock(ThreadsOAuthService.class);
-    private static final ThreadsOAuthController OAUTH_CONTROLLER = new ThreadsOAuthController(OAUTH_SERVICE);
+
+    @Mock
+    private ThreadsOAuthService threadsOAuthService;
+
+    @Mock
+    private ServerWebExchange serverWebExchange;
+
+    @InjectMocks
+    private ThreadsOAuthController threadsOAuthController;
 
     @Test
     void testLogin() {
-        when(OAUTH_SERVICE.login())
-            .thenReturn(Mono.just(responseEntity()));
+        when(threadsOAuthService.login(serverWebExchange))
+            .thenReturn(Mono.empty());
 
-        Mono<ResponseEntity<Void>> result = OAUTH_CONTROLLER.login();
+        Mono<Void> result = threadsOAuthController.login(serverWebExchange);
 
         create(result)
-            .expectNext(responseEntity())
             .verifyComplete();
     }
 
     @Test
     void testCallback() {
-        when(OAUTH_SERVICE.callback(anyString()))
+        when(threadsOAuthService.callback(anyString()))
             .thenReturn(Mono.just(""));
 
-        Mono<String> result = OAUTH_CONTROLLER.callback("code");
+        Mono<String> result = threadsOAuthController.callback("code");
 
         create(result)
             .expectNext("")
@@ -43,21 +50,13 @@ class ThreadsOAuthControllerTests {
 
     @Test
     void testRefreshToken() {
-        when(OAUTH_SERVICE.refreshToken())
+        when(threadsOAuthService.refreshToken())
             .thenReturn(Mono.just(""));
 
-        Mono<String> result = OAUTH_CONTROLLER.refreshToken();
+        Mono<String> result = threadsOAuthController.refreshToken();
 
         create(result)
             .expectNext("")
             .verifyComplete();
-    }
-
-    private static ResponseEntity<Void> responseEntity() {
-        URI uri = URI.create("redirectUri");
-
-        return ResponseEntity.status(FOUND)
-            .location(uri)
-            .build();
     }
 }

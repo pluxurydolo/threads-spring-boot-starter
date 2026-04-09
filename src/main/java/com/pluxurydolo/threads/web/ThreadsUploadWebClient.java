@@ -1,5 +1,6 @@
 package com.pluxurydolo.threads.web;
 
+import com.pluxurydolo.threads.dto.request.upload.ContainerStatusRequest;
 import com.pluxurydolo.threads.dto.request.upload.CreateContainerRequest;
 import com.pluxurydolo.threads.dto.request.upload.PublishContainerRequest;
 import com.pluxurydolo.threads.dto.response.ContainerStatusResponse;
@@ -10,8 +11,13 @@ import com.pluxurydolo.threads.exception.ThreadsImageContainerStatusException;
 import com.pluxurydolo.threads.exception.ThreadsPublishImageContainerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.util.UriBuilder;
 import reactor.core.publisher.Mono;
+
+import java.net.URI;
+import java.util.function.Function;
 
 import static org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED;
 import static org.springframework.web.reactive.function.BodyInserters.fromFormData;
@@ -36,12 +42,14 @@ public class ThreadsUploadWebClient {
         String userId = request.userId();
         String accessToken = request.accessToken();
 
+        BodyInserters.FormInserter<String> body = fromFormData("media_type", "IMAGE")
+            .with("image_url", imageUrl)
+            .with("access_token", accessToken)
+            .with("text", caption);
+
         return webClient.post()
             .uri("/v1.0/{userId}/threads", userId)
-            .body(fromFormData("media_type", "IMAGE")
-                .with("image_url", imageUrl)
-                .with("access_token", accessToken)
-                .with("text", caption))
+            .body(body)
             .retrieve()
             .bodyToMono(CreateContainerResponse.class)
             .doOnSuccess(_ -> LOGGER.info("ilau [threads-starter] Контейнер изображения {} успешно создан", imageUrl))
@@ -57,13 +65,15 @@ public class ThreadsUploadWebClient {
         String userId = request.userId();
         String accessToken = request.accessToken();
 
+        BodyInserters.FormInserter<String> body = fromFormData("media_type", "VIDEO")
+            .with("video_url", videoUrl)
+            .with("access_token", accessToken)
+            .with("text", caption);
+
         return webClient.post()
             .uri("/v1.0/{userId}/threads", userId)
             .contentType(APPLICATION_FORM_URLENCODED)
-            .body(fromFormData("media_type", "VIDEO")
-                .with("video_url", videoUrl)
-                .with("access_token", accessToken)
-                .with("text", caption))
+            .body(body)
             .retrieve()
             .bodyToMono(CreateContainerResponse.class)
             .doOnSuccess(_ -> LOGGER.info("rnud [threads-starter] Контейнер видео {} успешно создан", videoUrl))
@@ -78,10 +88,12 @@ public class ThreadsUploadWebClient {
         String userId = request.userId();
         String accessToken = request.accessToken();
 
+        BodyInserters.FormInserter<String> body = fromFormData("creation_id", containerId)
+            .with("access_token", accessToken);
+
         return webClient.post()
             .uri("/v1.0/{userId}/threads_publish", userId)
-            .body(fromFormData("creation_id", containerId)
-                .with("access_token", accessToken))
+            .body(body)
             .retrieve()
             .bodyToMono(PublishContainerResponse.class)
             .doOnSuccess(_ -> LOGGER.info("dohz [threads-starter] Контейнер {} успешно опубликован", containerId))
@@ -91,13 +103,18 @@ public class ThreadsUploadWebClient {
             });
     }
 
-    public Mono<ContainerStatusResponse> getContainerStatus(String containerId, String accessToken) {
+    public Mono<ContainerStatusResponse> getContainerStatus(ContainerStatusRequest request) {
+        String containerId = request.containerId();
+        String accessToken = request.accessToken();
+
+        Function<UriBuilder, URI> uri = uriBuilder -> uriBuilder
+            .path("/v1.0/{containerId}")
+            .queryParam("fields", "status,error_message")
+            .queryParam("access_token", accessToken)
+            .build(containerId);
+
         return webClient.get()
-            .uri(uriBuilder -> uriBuilder
-                .path("/v1.0/{containerId}")
-                .queryParam("fields", "status,error_message")
-                .queryParam("access_token", accessToken)
-                .build(containerId))
+            .uri(uri)
             .retrieve()
             .bodyToMono(ContainerStatusResponse.class)
             .doOnSuccess(_ -> LOGGER.info("vzfm [threads-starter] Статус контейнера {} успешно получен", containerId))

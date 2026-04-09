@@ -7,6 +7,9 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import reactor.core.publisher.Mono;
 
+import java.time.Clock;
+
+import static java.time.Clock.systemUTC;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -16,17 +19,22 @@ public class WebTestConfig {
 
     @Bean
     public ThreadsApiWebClient threadsApiWebClient() {
-        ThreadsApiWebClient mock = mock(ThreadsApiWebClient.class);
+        ThreadsApiWebClient threadsApiWebClient = mock(ThreadsApiWebClient.class);
 
-        when(mock.getAccessToken(any()))
+        when(threadsApiWebClient.getAccessToken(any()))
             .thenReturn(Mono.just(tokenResponse()));
 
-        return mock;
+        return threadsApiWebClient;
     }
 
     @Bean
     public ThreadsUploadWebClient threadsUploadWebClient() {
         return mock(ThreadsUploadWebClient.class);
+    }
+
+    @Bean
+    public Clock clock() {
+        return systemUTC();
     }
 
     private static TokenResponse tokenResponse() {

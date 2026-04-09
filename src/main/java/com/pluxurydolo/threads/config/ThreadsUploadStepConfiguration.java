@@ -1,6 +1,6 @@
 package com.pluxurydolo.threads.config;
 
-import com.pluxurydolo.threads.properties.PollingProperties;
+import com.pluxurydolo.threads.properties.ThreadsPollingProperties;
 import com.pluxurydolo.threads.properties.ThreadsProperties;
 import com.pluxurydolo.threads.token.AbstractTokenRetriever;
 import com.pluxurydolo.threads.step.ThreadsContainerPublisher;
@@ -63,9 +63,9 @@ public class ThreadsUploadStepConfiguration {
     @Bean
     public ThreadsContainerStatusPoller threadsImageContainerStatusPoller(
         ThreadsUploadWebClient threadsUploadWebClient,
-        PollingProperties pollingProperties
+        ThreadsPollingProperties threadsPollingProperties
     ) {
-        return new ThreadsContainerStatusPoller(threadsUploadWebClient, pollingProperties);
+        return new ThreadsContainerStatusPoller(threadsUploadWebClient, threadsPollingProperties);
     }
 
     @Bean

@@ -5,7 +5,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import java.time.Duration;
 
 @ConfigurationProperties(prefix = "threads.polling")
-public record PollingProperties(
+public record ThreadsPollingProperties(
     int maxRepeat,
     Duration delay
 ) {
