@@ -6,6 +6,7 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import reactor.core.publisher.Mono;
 
+import java.time.Clock;
 import java.util.Map;
 
 import static java.time.Clock.systemUTC;
@@ -35,8 +36,13 @@ public class TokensTestConfig {
 
             @Override
             public Mono<String> saveTokens(Map<String, String> tokens) {
-                return Mono.just("");
+                return Mono.just("saveTokens");
             }
         };
+    }
+
+    @Bean
+    public Clock clock() {
+        return systemUTC();
     }
 }

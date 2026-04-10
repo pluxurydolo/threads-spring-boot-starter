@@ -1,21 +1,3 @@
-threads:
-  enabled: true
-  app:
-    id: id
-    secret: secret
-  user:
-    id: id
-  login:
-    url: /app-name/v1/threads/login
-  redirect:
-    uri: http://localhost:8888$/app-name/v1/threads/login
-    url: /app-name/v1/threads/login/redirect
-  refresh:
-    url: /app-name/v1/threads/refresh
-    token:
-      scheduler:
-        cron: "0 0 0 * * SUN"
-        zone: Europe/Moscow
 spring:
   main:
     allow-bean-definition-overriding: true
