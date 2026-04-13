@@ -2,5 +2,12 @@ package com.pluxurydolo.threads.validator;
 
 public enum ValidationResult {
     SUCCESS,
-    FAILURE
+    FAILURE;
+
+    public static ValidationResult fromBoolean(boolean result) {
+        if (result) {
+            return SUCCESS;
+        }
+        return FAILURE;
+    }
 }
