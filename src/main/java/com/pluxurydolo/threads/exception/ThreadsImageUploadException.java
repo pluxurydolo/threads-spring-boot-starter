@@ -1,7 +1,7 @@
 package com.pluxurydolo.threads.exception;
 
 public class ThreadsImageUploadException extends RuntimeException {
-    public ThreadsImageUploadException(Throwable throwable) {
-        super(throwable);
+    public ThreadsImageUploadException(Throwable cause) {
+        super(cause);
     }
 }
