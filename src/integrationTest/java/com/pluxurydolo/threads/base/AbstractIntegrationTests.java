@@ -29,8 +29,7 @@ import static org.springframework.test.annotation.DirtiesContext.ClassMode.BEFOR
     "threads.redirect.url=/app-name/v1/threads/login/redirect",
     "threads.refresh.url=/app-name/v1/threads/refresh",
     "threads.refresh.token.scheduler.cron=0 0 0 * * SUN",
-    "threads.refresh.token.scheduler.zone=Europe/Moscow",
-    "threads.rate-limit.threshold=5"
+    "threads.refresh.token.scheduler.zone=Europe/Moscow"
 })
 public abstract class AbstractIntegrationTests {
 }
