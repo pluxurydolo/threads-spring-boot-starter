@@ -10,6 +10,7 @@ import com.pluxurydolo.threads.step.image.ThreadsImageUploader;
 import com.pluxurydolo.threads.step.video.ThreadsVideoContainerCreator;
 import com.pluxurydolo.threads.step.video.ThreadsVideoUploader;
 import com.pluxurydolo.threads.web.ThreadsUploadWebClient;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -17,6 +18,7 @@ import org.springframework.context.annotation.Configuration;
 public class ThreadsUploadStepConfiguration {
 
     @Bean
+    @ConditionalOnMissingBean
     public ThreadsImageUploader threadsImageSender(
         ThreadsImageContainerCreator threadsImageContainerCreator,
         ThreadsContainerStatusPoller threadsContainerStatusPoller,
@@ -34,6 +36,7 @@ public class ThreadsUploadStepConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean
     public ThreadsVideoUploader threadsVideoSender(
         ThreadsVideoContainerCreator threadsVideoContainerCreator,
         ThreadsContainerStatusPoller threadsContainerStatusPoller,
@@ -51,16 +54,19 @@ public class ThreadsUploadStepConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean
     public ThreadsImageContainerCreator threadsImageContainerCreator(ThreadsUploadWebClient threadsUploadWebClient) {
         return new ThreadsImageContainerCreator(threadsUploadWebClient);
     }
 
     @Bean
+    @ConditionalOnMissingBean
     public ThreadsVideoContainerCreator threadsVideoContainerCreator(ThreadsUploadWebClient threadsUploadWebClient) {
         return new ThreadsVideoContainerCreator(threadsUploadWebClient);
     }
 
     @Bean
+    @ConditionalOnMissingBean
     public ThreadsContainerStatusPoller threadsImageContainerStatusPoller(
         ThreadsUploadWebClient threadsUploadWebClient,
         ThreadsPollingProperties threadsPollingProperties
@@ -69,6 +75,7 @@ public class ThreadsUploadStepConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean
     public ThreadsContainerPublisher threadsImageContainerPublisher(
         ThreadsUploadWebClient threadsUploadWebClient
     ) {
