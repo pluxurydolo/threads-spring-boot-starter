@@ -49,7 +49,7 @@ public class ThreadsOAuthService {
         return response.setComplete();
     }
 
-    public Mono<String> callback(String code) {
+    public Mono<String> redirect(String code) {
         return threadsExchangeTokenFlow.getToken(code)
             .map(TokenResponse::accessToken)
             .flatMap(threadsAccessTokenFlow::getToken)

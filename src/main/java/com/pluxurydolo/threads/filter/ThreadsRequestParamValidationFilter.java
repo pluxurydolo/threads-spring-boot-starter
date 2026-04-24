@@ -1,6 +1,6 @@
 package com.pluxurydolo.threads.filter;
 
-import com.pluxurydolo.threads.properties.ThreadsProperties;
+import com.pluxurydolo.threads.properties.ThreadsEndpointProperties;
 import com.pluxurydolo.threads.validator.RequestParamValidator;
 import com.pluxurydolo.threads.validator.ValidationResult;
 import org.springframework.core.annotation.Order;
@@ -18,26 +18,26 @@ import static org.springframework.http.HttpStatus.FORBIDDEN;
 @Order(HIGHEST_PRECEDENCE)
 public class ThreadsRequestParamValidationFilter implements WebFilter {
     private final RequestParamValidator requestParamValidator;
-    private final ThreadsProperties threadsProperties;
+    private final ThreadsEndpointProperties threadsEndpointProperties;
 
     public ThreadsRequestParamValidationFilter(
         RequestParamValidator requestParamValidator,
-        ThreadsProperties threadsProperties
+        ThreadsEndpointProperties threadsEndpointProperties
     ) {
         this.requestParamValidator = requestParamValidator;
-        this.threadsProperties = threadsProperties;
+        this.threadsEndpointProperties = threadsEndpointProperties;
     }
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
-        String loginUrl = threadsProperties.loginUrl();
-        String redirectUrl = threadsProperties.redirectUrl();
-        String refreshUrl = threadsProperties.refreshUrl();
+        String loginUrl = threadsEndpointProperties.loginUrl();
+        String redirectUrl = threadsEndpointProperties.redirectUrl();
+        String refreshTokenUrl = threadsEndpointProperties.refreshTokenUrl();
 
         ServerHttpRequest request = exchange.getRequest();
         String path = request.getURI().getPath();
 
-        if (!path.equals(loginUrl) && !path.equals(redirectUrl) && !path.equals(refreshUrl)) {
+        if (!path.equals(loginUrl) && !path.equals(redirectUrl) && !path.equals(refreshTokenUrl)) {
             return chain.filter(exchange);
         }
 

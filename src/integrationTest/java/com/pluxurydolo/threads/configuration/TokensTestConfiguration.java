@@ -1,4 +1,4 @@
-package com.pluxurydolo.threads.config;
+package com.pluxurydolo.threads.configuration;
 
 import com.pluxurydolo.threads.token.AbstractTokenRetriever;
 import com.pluxurydolo.threads.token.AbstractTokenSaver;
@@ -12,7 +12,7 @@ import java.util.Map;
 import static java.time.Clock.systemUTC;
 
 @TestConfiguration
-public class TokensTestConfig {
+public class TokensTestConfiguration {
 
     @Bean
     public AbstractTokenRetriever abstractTokensRetriever() {

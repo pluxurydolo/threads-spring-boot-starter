@@ -1,4 +1,4 @@
-package com.pluxurydolo.threads.config;
+package com.pluxurydolo.threads.configuration;
 
 import com.pluxurydolo.threads.controller.ThreadsOAuthController;
 import com.pluxurydolo.threads.flow.ThreadsAccessTokenFlow;

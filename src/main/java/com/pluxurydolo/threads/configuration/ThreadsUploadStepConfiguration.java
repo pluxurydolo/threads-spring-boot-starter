@@ -1,7 +1,7 @@
-package com.pluxurydolo.threads.config;
+package com.pluxurydolo.threads.configuration;
 
 import com.pluxurydolo.threads.properties.ThreadsPollingProperties;
-import com.pluxurydolo.threads.properties.ThreadsProperties;
+import com.pluxurydolo.threads.properties.ThreadsAuthProperties;
 import com.pluxurydolo.threads.token.AbstractTokenRetriever;
 import com.pluxurydolo.threads.step.ThreadsContainerPublisher;
 import com.pluxurydolo.threads.step.ThreadsContainerStatusPoller;
@@ -24,14 +24,14 @@ public class ThreadsUploadStepConfiguration {
         ThreadsContainerStatusPoller threadsContainerStatusPoller,
         ThreadsContainerPublisher threadsContainerPublisher,
         AbstractTokenRetriever abstractTokenRetriever,
-        ThreadsProperties threadsProperties
+        ThreadsAuthProperties threadsAuthProperties
     ) {
         return new ThreadsImageUploader(
             threadsImageContainerCreator,
             threadsContainerStatusPoller,
             threadsContainerPublisher,
             abstractTokenRetriever,
-            threadsProperties
+            threadsAuthProperties
         );
     }
 
@@ -42,14 +42,14 @@ public class ThreadsUploadStepConfiguration {
         ThreadsContainerStatusPoller threadsContainerStatusPoller,
         ThreadsContainerPublisher threadsContainerPublisher,
         AbstractTokenRetriever abstractTokenRetriever,
-        ThreadsProperties threadsProperties
+        ThreadsAuthProperties threadsAuthProperties
     ) {
         return new ThreadsVideoUploader(
             threadsVideoContainerCreator,
             threadsContainerStatusPoller,
             threadsContainerPublisher,
             abstractTokenRetriever,
-            threadsProperties
+            threadsAuthProperties
         );
     }
 

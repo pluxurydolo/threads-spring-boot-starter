@@ -1,14 +1,16 @@
-package com.pluxurydolo.threads.config;
+package com.pluxurydolo.threads.configuration;
 
+import com.pluxurydolo.threads.properties.ThreadsAuthProperties;
+import com.pluxurydolo.threads.properties.ThreadsEndpointProperties;
 import com.pluxurydolo.threads.properties.ThreadsPollingProperties;
-import com.pluxurydolo.threads.properties.ThreadsProperties;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Import;
 
 @AutoConfiguration
 @EnableConfigurationProperties({
-    ThreadsProperties.class,
+    ThreadsAuthProperties.class,
+    ThreadsEndpointProperties.class,
     ThreadsPollingProperties.class
 })
 @Import({

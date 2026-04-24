@@ -1,8 +1,9 @@
 package com.pluxurydolo.threads.flow;
 
 import com.pluxurydolo.threads.dto.response.TokenResponse;
-import com.pluxurydolo.threads.properties.ThreadsProperties;
+import com.pluxurydolo.threads.properties.ThreadsAuthProperties;
 import com.pluxurydolo.threads.web.ThreadsApiWebClient;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -21,19 +22,23 @@ class ThreadsExchangeTokenFlowTests {
     private ThreadsApiWebClient threadsApiWebClient;
 
     @Mock
-    private ThreadsProperties threadsProperties;
+    private ThreadsAuthProperties threadsAuthProperties;
 
     @InjectMocks
     private ThreadsExchangeTokenFlow threadsExchangeTokenFlow;
 
+    @BeforeEach
+    void setUp() {
+        when(threadsAuthProperties.appId())
+            .thenReturn("appId");
+        when(threadsAuthProperties.appSecret())
+            .thenReturn("appSecret");
+        when(threadsAuthProperties.redirectUri())
+            .thenReturn("redirectUri");
+    }
+
     @Test
     void testGetToken() {
-        when(threadsProperties.appId())
-            .thenReturn("appId");
-        when(threadsProperties.appSecret())
-            .thenReturn("appSecret");
-        when(threadsProperties.redirectUri())
-            .thenReturn("redirectUri");
         when(threadsApiWebClient.getExchangeToken(any()))
             .thenReturn(Mono.just(tokenResponse()));
 
@@ -46,12 +51,6 @@ class ThreadsExchangeTokenFlowTests {
 
     @Test
     void testGetTokenWhenExceptionOccurred() {
-        when(threadsProperties.appId())
-            .thenReturn("appId");
-        when(threadsProperties.appSecret())
-            .thenReturn("appSecret");
-        when(threadsProperties.redirectUri())
-            .thenReturn("redirectUri");
         when(threadsApiWebClient.getExchangeToken(any()))
             .thenReturn(Mono.error(new RuntimeException()));
 

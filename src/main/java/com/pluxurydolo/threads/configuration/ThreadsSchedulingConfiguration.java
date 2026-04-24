@@ -1,4 +1,4 @@
-package com.pluxurydolo.threads.config;
+package com.pluxurydolo.threads.configuration;
 
 import com.pluxurydolo.threads.scheduler.ThreadsRefreshTokenScheduler;
 import com.pluxurydolo.threads.scheduler.handler.ThreadsRefreshTokenSchedulerHandler;

@@ -11,8 +11,8 @@ public class ThreadsRefreshTokenScheduler {
     }
 
     @Scheduled(
-        cron = "${threads.refresh.token.scheduler.cron}",
-        zone = "${threads.refresh.token.scheduler.zone}"
+        cron = "${threads.scheduler.refresh-token.cron}",
+        zone = "${threads.scheduler.refresh-token.zone}"
     )
     public void schedule() {
         String jobName = getClass().getName();

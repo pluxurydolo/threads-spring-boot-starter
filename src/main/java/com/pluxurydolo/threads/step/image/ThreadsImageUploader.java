@@ -8,7 +8,7 @@ import com.pluxurydolo.threads.dto.request.upload.UploadMediaRequest;
 import com.pluxurydolo.threads.dto.response.CreateContainerResponse;
 import com.pluxurydolo.threads.dto.response.PublishContainerResponse;
 import com.pluxurydolo.threads.exception.ThreadsImageUploadException;
-import com.pluxurydolo.threads.properties.ThreadsProperties;
+import com.pluxurydolo.threads.properties.ThreadsAuthProperties;
 import com.pluxurydolo.threads.token.AbstractTokenRetriever;
 import com.pluxurydolo.threads.step.ThreadsContainerPublisher;
 import com.pluxurydolo.threads.step.ThreadsContainerStatusPoller;
@@ -23,26 +23,26 @@ public class ThreadsImageUploader {
     private final ThreadsContainerStatusPoller threadsContainerStatusPoller;
     private final ThreadsContainerPublisher threadsContainerPublisher;
     private final AbstractTokenRetriever abstractTokenRetriever;
-    private final ThreadsProperties threadsProperties;
+    private final ThreadsAuthProperties threadsAuthProperties;
 
     public ThreadsImageUploader(
         ThreadsImageContainerCreator threadsImageContainerCreator,
         ThreadsContainerStatusPoller threadsContainerStatusPoller,
         ThreadsContainerPublisher threadsContainerPublisher,
         AbstractTokenRetriever abstractTokenRetriever,
-        ThreadsProperties threadsProperties
+        ThreadsAuthProperties threadsAuthProperties
     ) {
         this.threadsImageContainerCreator = threadsImageContainerCreator;
         this.threadsContainerStatusPoller = threadsContainerStatusPoller;
         this.threadsContainerPublisher = threadsContainerPublisher;
         this.abstractTokenRetriever = abstractTokenRetriever;
-        this.threadsProperties = threadsProperties;
+        this.threadsAuthProperties = threadsAuthProperties;
     }
 
     public Mono<String> upload(UploadMediaRequest request) {
         String imageUrl = request.mediaUrl();
         String caption = request.caption();
-        String userId = threadsProperties.userId();
+        String userId = threadsAuthProperties.userId();
 
         return abstractTokenRetriever.retrieve()
             .map(Tokens::accessToken)

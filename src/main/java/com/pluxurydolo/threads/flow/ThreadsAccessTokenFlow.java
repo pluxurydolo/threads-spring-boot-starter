@@ -1,29 +1,29 @@
 package com.pluxurydolo.threads.flow;
 
 import com.pluxurydolo.threads.dto.request.token.AccessTokenRequest;
-import com.pluxurydolo.threads.properties.ThreadsProperties;
+import com.pluxurydolo.threads.properties.ThreadsAuthProperties;
 import com.pluxurydolo.threads.token.AbstractTokenSaver;
 import com.pluxurydolo.threads.web.ThreadsApiWebClient;
 import reactor.core.publisher.Mono;
 
 public class ThreadsAccessTokenFlow {
-    private final ThreadsProperties threadsProperties;
+    private final ThreadsAuthProperties threadsAuthProperties;
     private final ThreadsApiWebClient threadsApiWebClient;
     private final AbstractTokenSaver abstractTokenSaver;
 
     public ThreadsAccessTokenFlow(
-        ThreadsProperties threadsProperties,
+        ThreadsAuthProperties threadsAuthProperties,
         ThreadsApiWebClient threadsApiWebClient,
         AbstractTokenSaver abstractTokenSaver
     ) {
-        this.threadsProperties = threadsProperties;
+        this.threadsAuthProperties = threadsAuthProperties;
         this.threadsApiWebClient = threadsApiWebClient;
         this.abstractTokenSaver = abstractTokenSaver;
     }
 
     public Mono<String> getToken(String exchangeToken) {
-        String appId = threadsProperties.appId();
-        String appSecret = threadsProperties.appSecret();
+        String appId = threadsAuthProperties.appId();
+        String appSecret = threadsAuthProperties.appSecret();
         AccessTokenRequest request = new AccessTokenRequest(appId, appSecret, exchangeToken);
 
         return threadsApiWebClient.getAccessToken(request)

@@ -75,14 +75,14 @@ class ThreadsOAuthServiceTests {
     }
 
     @Test
-    void testCallback() {
+    void testRedirect() {
         when(threadsExchangeTokenFlow.getToken(anyString()))
             .thenReturn(Mono.just(tokenResponse()));
         when(threadsAccessTokenFlow.getToken(anyString()))
             .thenReturn(Mono.just(""));
 
 
-        Mono<String> result = threadsOAuthService.callback("code");
+        Mono<String> result = threadsOAuthService.redirect("code");
 
         create(result)
             .expectNext("")

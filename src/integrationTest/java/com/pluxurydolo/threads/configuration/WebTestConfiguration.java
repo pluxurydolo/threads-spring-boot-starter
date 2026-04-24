@@ -1,4 +1,4 @@
-package com.pluxurydolo.threads.config;
+package com.pluxurydolo.threads.configuration;
 
 import com.pluxurydolo.threads.dto.response.TokenResponse;
 import com.pluxurydolo.threads.web.ThreadsApiWebClient;
@@ -12,7 +12,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @TestConfiguration
-public class WebTestConfig {
+public class WebTestConfiguration {
 
     @Bean
     public ThreadsApiWebClient threadsApiWebClient() {

@@ -1,4 +1,4 @@
-package com.pluxurydolo.threads.config;
+package com.pluxurydolo.threads.configuration;
 
 import com.pluxurydolo.threads.validator.RequestParamValidator;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -8,7 +8,7 @@ import reactor.core.publisher.Mono;
 import static com.pluxurydolo.threads.validator.ValidationResult.SUCCESS;
 
 @TestConfiguration
-public class ValidatorTestConfig {
+public class ValidatorTestConfiguration {
 
     @Bean
     public RequestParamValidator requestParamValidator() {

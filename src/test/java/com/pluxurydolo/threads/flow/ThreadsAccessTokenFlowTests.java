@@ -1,9 +1,10 @@
 package com.pluxurydolo.threads.flow;
 
 import com.pluxurydolo.threads.dto.response.TokenResponse;
-import com.pluxurydolo.threads.properties.ThreadsProperties;
+import com.pluxurydolo.threads.properties.ThreadsAuthProperties;
 import com.pluxurydolo.threads.token.AbstractTokenSaver;
 import com.pluxurydolo.threads.web.ThreadsApiWebClient;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -20,7 +21,7 @@ import static reactor.test.StepVerifier.create;
 class ThreadsAccessTokenFlowTests {
 
     @Mock
-    private ThreadsProperties threadsProperties;
+    private ThreadsAuthProperties threadsAuthProperties;
 
     @Mock
     private ThreadsApiWebClient threadsApiWebClient;
@@ -31,12 +32,16 @@ class ThreadsAccessTokenFlowTests {
     @InjectMocks
     private ThreadsAccessTokenFlow threadsAccessTokenFlow;
 
+    @BeforeEach
+    void setUp() {
+        when(threadsAuthProperties.appId())
+            .thenReturn("appId");
+        when(threadsAuthProperties.appSecret())
+            .thenReturn("appSecret");
+    }
+
     @Test
     void testGetToken() {
-        when(threadsProperties.appId())
-            .thenReturn("appId");
-        when(threadsProperties.appSecret())
-            .thenReturn("appSecret");
         when(threadsApiWebClient.getAccessToken(any()))
             .thenReturn(Mono.just(tokenResponse()));
         when(abstractTokenSaver.save(any(), anyString()))
@@ -51,10 +56,6 @@ class ThreadsAccessTokenFlowTests {
 
     @Test
     void testGetTokenWhenExceptionOccurred() {
-        when(threadsProperties.appId())
-            .thenReturn("appId");
-        when(threadsProperties.appSecret())
-            .thenReturn("appSecret");
         when(threadsApiWebClient.getAccessToken(any()))
             .thenReturn(Mono.error(new RuntimeException()));
 

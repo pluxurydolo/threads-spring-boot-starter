@@ -6,10 +6,11 @@ import com.pluxurydolo.threads.dto.response.CreateContainerResponse;
 import com.pluxurydolo.threads.dto.response.ErrorDetails;
 import com.pluxurydolo.threads.dto.response.PublishContainerResponse;
 import com.pluxurydolo.threads.exception.ThreadsImageUploadException;
-import com.pluxurydolo.threads.properties.ThreadsProperties;
+import com.pluxurydolo.threads.properties.ThreadsAuthProperties;
 import com.pluxurydolo.threads.token.AbstractTokenRetriever;
 import com.pluxurydolo.threads.step.ThreadsContainerPublisher;
 import com.pluxurydolo.threads.step.ThreadsContainerStatusPoller;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -37,15 +38,19 @@ class ThreadsImageUploaderTests {
     private AbstractTokenRetriever abstractTokenRetriever;
 
     @Mock
-    private ThreadsProperties threadsProperties;
+    private ThreadsAuthProperties threadsAuthProperties;
 
     @InjectMocks
     private ThreadsImageUploader threadsImageUploader;
 
+    @BeforeEach
+    void setUp() {
+        when(threadsAuthProperties.userId())
+            .thenReturn("userId");
+    }
+
     @Test
     void testUpload() {
-        when(threadsProperties.userId())
-            .thenReturn("userId");
         when(abstractTokenRetriever.retrieve())
             .thenReturn(Mono.just(tokens()));
         when(threadsImageContainerCreator.create(any()))
@@ -64,8 +69,6 @@ class ThreadsImageUploaderTests {
 
     @Test
     void testUploadWhenExceptionOccurred() {
-        when(threadsProperties.userId())
-            .thenReturn("userId");
         when(abstractTokenRetriever.retrieve())
             .thenReturn(Mono.just(tokens()));
         when(threadsImageContainerCreator.create(any()))

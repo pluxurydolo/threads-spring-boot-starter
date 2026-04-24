@@ -1,19 +1,19 @@
 package com.pluxurydolo.threads.flow;
 
-import com.pluxurydolo.threads.properties.ThreadsProperties;
+import com.pluxurydolo.threads.properties.ThreadsAuthProperties;
 
 import static java.lang.String.format;
 
 public class ThreadsAuthorizationCodeFlow {
-    private final ThreadsProperties threadsProperties;
+    private final ThreadsAuthProperties threadsAuthProperties;
 
-    public ThreadsAuthorizationCodeFlow(ThreadsProperties threadsProperties) {
-        this.threadsProperties = threadsProperties;
+    public ThreadsAuthorizationCodeFlow(ThreadsAuthProperties threadsAuthProperties) {
+        this.threadsAuthProperties = threadsAuthProperties;
     }
 
     public String getAuthorizationUrl() {
-        String appId = threadsProperties.appId();
-        String redirectUri = threadsProperties.redirectUri();
+        String appId = threadsAuthProperties.appId();
+        String redirectUri = threadsAuthProperties.redirectUri();
         String scope = "threads_basic,threads_content_publish";
         String responseType = "code";
 

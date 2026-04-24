@@ -1,6 +1,6 @@
 package com.pluxurydolo.threads.filter;
 
-import com.pluxurydolo.threads.properties.ThreadsProperties;
+import com.pluxurydolo.threads.properties.ThreadsEndpointProperties;
 import com.pluxurydolo.threads.validator.RequestParamValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,7 +34,7 @@ class ThreadsRequestParamValidationFilterTests {
     private RequestParamValidator requestParamValidator;
 
     @Mock
-    private ThreadsProperties threadsProperties;
+    private ThreadsEndpointProperties threadsEndpointProperties;
 
     @Mock
     private ServerWebExchange serverWebExchange;
@@ -56,12 +56,12 @@ class ThreadsRequestParamValidationFilterTests {
 
     @BeforeEach
     void setUp() {
-        when(threadsProperties.loginUrl())
+        when(threadsEndpointProperties.loginUrl())
             .thenReturn("loginUrl");
-        when(threadsProperties.redirectUrl())
+        when(threadsEndpointProperties.redirectUrl())
             .thenReturn("redirectUrl");
-        when(threadsProperties.refreshUrl())
-            .thenReturn("refreshUrl");
+        when(threadsEndpointProperties.refreshTokenUrl())
+            .thenReturn("refreshTokenUrl");
         when(serverWebExchange.getRequest())
             .thenReturn(serverHttpRequest);
         when(serverHttpRequest.getURI())
@@ -145,9 +145,9 @@ class ThreadsRequestParamValidationFilterTests {
     }
 
     @Test
-    void testFilterWithRefreshPath() {
+    void testFilterWithRefreshTokenPath() {
         when(uri.getPath())
-            .thenReturn("refreshUrl");
+            .thenReturn("refreshTokenUrl");
         when(serverHttpRequest.getQueryParams())
             .thenReturn(queryParams());
         when(requestParamValidator.validate(anyString()))
@@ -162,9 +162,9 @@ class ThreadsRequestParamValidationFilterTests {
     }
 
     @Test
-    void testFilterWithRefreshPathWhenValidationFailed() {
+    void testFilterWithRefreshTokenPathWhenValidationFailed() {
         when(uri.getPath())
-            .thenReturn("refreshUrl");
+            .thenReturn("refreshTokenUrl");
         when(serverHttpRequest.getQueryParams())
             .thenReturn(queryParams());
         when(requestParamValidator.validate(anyString()))

@@ -37,11 +37,11 @@ class ThreadsOAuthControllerTests {
     }
 
     @Test
-    void testCallback() {
-        when(threadsOAuthService.callback(anyString()))
+    void testRedirect() {
+        when(threadsOAuthService.redirect(anyString()))
             .thenReturn(Mono.just(""));
 
-        Mono<String> result = threadsOAuthController.callback("code");
+        Mono<String> result = threadsOAuthController.redirect("code");
 
         create(result)
             .expectNext("")

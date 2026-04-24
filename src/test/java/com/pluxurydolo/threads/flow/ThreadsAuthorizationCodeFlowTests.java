@@ -1,6 +1,6 @@
 package com.pluxurydolo.threads.flow;
 
-import com.pluxurydolo.threads.properties.ThreadsProperties;
+import com.pluxurydolo.threads.properties.ThreadsAuthProperties;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -14,16 +14,16 @@ import static org.mockito.Mockito.when;
 class ThreadsAuthorizationCodeFlowTests {
 
     @Mock
-    private ThreadsProperties threadsProperties;
+    private ThreadsAuthProperties threadsAuthProperties;
 
     @InjectMocks
     private ThreadsAuthorizationCodeFlow threadsAuthorizationCodeFlow;
 
     @Test
     void testGetAuthorizationUrl() {
-        when(threadsProperties.appId())
+        when(threadsAuthProperties.appId())
             .thenReturn("appId");
-        when(threadsProperties.redirectUri())
+        when(threadsAuthProperties.redirectUri())
             .thenReturn("redirectUri");
 
         String result = threadsAuthorizationCodeFlow.getAuthorizationUrl();

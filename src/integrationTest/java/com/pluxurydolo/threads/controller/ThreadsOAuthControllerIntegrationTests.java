@@ -32,7 +32,7 @@ class ThreadsOAuthControllerIntegrationTests extends AbstractControllerIntegrati
     @Test
     void testRefresh() {
         webTestClient.get()
-            .uri("/app-name/v1/threads/refresh")
+            .uri("/app-name/v1/threads/refresh-token")
             .exchange()
             .expectStatus().isOk()
             .expectBody(String.class)

@@ -18,19 +18,19 @@ public class ThreadsOAuthController {
         this.threadsOAuthService = threadsOAuthService;
     }
 
-    @GetMapping("${threads.login.url}")
+    @GetMapping("${threads.endpoint.login}")
     @ConcurrencyLimit(limit = 1, policy = REJECT)
     public Mono<Void> login(ServerWebExchange serverWebExchange) {
         return threadsOAuthService.login(serverWebExchange);
     }
 
-    @GetMapping("${threads.redirect.url}")
+    @GetMapping("${threads.endpoint.redirect}")
     @ConcurrencyLimit(limit = 1, policy = REJECT)
-    public Mono<String> callback(@RequestParam("code") String code) {
-        return threadsOAuthService.callback(code);
+    public Mono<String> redirect(@RequestParam("code") String code) {
+        return threadsOAuthService.redirect(code);
     }
 
-    @GetMapping("${threads.refresh.url}")
+    @GetMapping("${threads.endpoint.refresh-token}")
     @ConcurrencyLimit(limit = 1, policy = REJECT)
     public Mono<String> refreshToken() {
         return threadsOAuthService.refreshToken();

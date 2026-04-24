@@ -1,6 +1,6 @@
-package com.pluxurydolo.threads.config;
+package com.pluxurydolo.threads.configuration;
 
-import com.pluxurydolo.threads.properties.ThreadsProperties;
+import com.pluxurydolo.threads.properties.ThreadsAuthProperties;
 import com.pluxurydolo.threads.flow.ThreadsAccessTokenFlow;
 import com.pluxurydolo.threads.flow.ThreadsAuthorizationCodeFlow;
 import com.pluxurydolo.threads.flow.ThreadsExchangeTokenFlow;
@@ -16,27 +16,27 @@ public class ThreadsOAuthConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public ThreadsAuthorizationCodeFlow threadsAuthorizationCodeFlow(ThreadsProperties threadsProperties) {
-        return new ThreadsAuthorizationCodeFlow(threadsProperties);
+    public ThreadsAuthorizationCodeFlow threadsAuthorizationCodeFlow(ThreadsAuthProperties threadsAuthProperties) {
+        return new ThreadsAuthorizationCodeFlow(threadsAuthProperties);
     }
 
     @Bean
     @ConditionalOnMissingBean
     public ThreadsExchangeTokenFlow threadsExchangeTokenFlow(
         ThreadsApiWebClient threadsApiWebClient,
-        ThreadsProperties threadsProperties
+        ThreadsAuthProperties threadsAuthProperties
     ) {
-        return new ThreadsExchangeTokenFlow(threadsApiWebClient, threadsProperties);
+        return new ThreadsExchangeTokenFlow(threadsApiWebClient, threadsAuthProperties);
     }
 
     @Bean
     @ConditionalOnMissingBean
     public ThreadsAccessTokenFlow threadsAccessTokenFlow(
-        ThreadsProperties threadsProperties,
+        ThreadsAuthProperties threadsAuthProperties,
         ThreadsApiWebClient threadsApiWebClient,
         AbstractTokenSaver abstractTokenSaver
     ) {
-        return new ThreadsAccessTokenFlow(threadsProperties, threadsApiWebClient, abstractTokenSaver);
+        return new ThreadsAccessTokenFlow(threadsAuthProperties, threadsApiWebClient, abstractTokenSaver);
     }
 
     @Bean
