@@ -5,7 +5,6 @@ import com.pluxurydolo.threads.dto.request.upload.UploadMediaRequest;
 import com.pluxurydolo.threads.dto.response.CreateContainerResponse;
 import com.pluxurydolo.threads.dto.response.ErrorDetails;
 import com.pluxurydolo.threads.dto.response.PublishContainerResponse;
-import com.pluxurydolo.threads.exception.ThreadsVideoUploadException;
 import com.pluxurydolo.threads.properties.ThreadsAuthProperties;
 import com.pluxurydolo.threads.step.ThreadsContainerPublisher;
 import com.pluxurydolo.threads.step.ThreadsContainerStatusPoller;
@@ -75,7 +74,7 @@ class ThreadsVideoUploaderTests {
         Mono<String> result = threadsVideoUploader.upload(uploadMediaRequest());
 
         create(result)
-            .expectError(ThreadsVideoUploadException.class)
+            .expectError(RuntimeException.class)
             .verify();
     }
 

@@ -1,24 +1,19 @@
 package com.pluxurydolo.threads.step.video;
 
 import com.pluxurydolo.threads.dto.Tokens;
-import com.pluxurydolo.threads.dto.request.upload.CreateContainerRequest;
 import com.pluxurydolo.threads.dto.request.upload.ContainerStatusRequest;
+import com.pluxurydolo.threads.dto.request.upload.CreateContainerRequest;
 import com.pluxurydolo.threads.dto.request.upload.PublishContainerRequest;
 import com.pluxurydolo.threads.dto.request.upload.UploadMediaRequest;
 import com.pluxurydolo.threads.dto.response.CreateContainerResponse;
 import com.pluxurydolo.threads.dto.response.PublishContainerResponse;
-import com.pluxurydolo.threads.exception.ThreadsVideoUploadException;
 import com.pluxurydolo.threads.properties.ThreadsAuthProperties;
-import com.pluxurydolo.threads.token.AbstractTokenRetriever;
 import com.pluxurydolo.threads.step.ThreadsContainerPublisher;
 import com.pluxurydolo.threads.step.ThreadsContainerStatusPoller;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.pluxurydolo.threads.token.AbstractTokenRetriever;
 import reactor.core.publisher.Mono;
 
 public class ThreadsVideoUploader {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ThreadsVideoUploader.class);
-
     private final ThreadsVideoContainerCreator threadsVideoContainerCreator;
     private final ThreadsContainerStatusPoller threadsContainerStatusPoller;
     private final ThreadsContainerPublisher threadsContainerPublisher;
@@ -47,12 +42,7 @@ public class ThreadsVideoUploader {
         return abstractTokenRetriever.retrieve()
             .map(Tokens::accessToken)
             .flatMap(accessToken -> uploadVideo(videoUrl, caption, userId, accessToken))
-            .map(PublishContainerResponse::id)
-            .doOnSuccess(_ -> LOGGER.info("qnoh [threads-starter] Видео успешно опубликовано"))
-            .onErrorResume(throwable -> {
-                LOGGER.error("uhgv [threads-starter] Произошла ошибка при публикации видео");
-                return Mono.error(new ThreadsVideoUploadException(throwable));
-            });
+            .map(PublishContainerResponse::id);
     }
 
     private Mono<PublishContainerResponse> uploadVideo(String videoUrl, String caption, String userId, String accessToken) {
