@@ -24,10 +24,8 @@ public class WebTestConfiguration {
 
         when(mock.getAccessToken(any()))
             .thenReturn(Mono.just(tokenResponse()));
-
         when(mock.getExchangeToken(any()))
             .thenReturn(Mono.just(tokenResponse()));
-
         when(mock.refreshToken(any()))
             .thenReturn(Mono.just(tokenResponse()));
 
@@ -40,13 +38,10 @@ public class WebTestConfiguration {
 
         when(mock.createImageContainer(any()))
             .thenReturn(Mono.just(createContainerResponse()));
-
         when(mock.createVideoContainer(any()))
             .thenReturn(Mono.just(createContainerResponse()));
-
         when(mock.publishContainer(any()))
             .thenReturn(Mono.just(publishContainerResponse()));
-
         when(mock.getContainerStatus(any()))
             .thenReturn(Mono.just(containerStatusResponse()));
 
