@@ -5,11 +5,10 @@ import com.pluxurydolo.threads.dto.request.upload.UploadMediaRequest;
 import com.pluxurydolo.threads.dto.response.CreateContainerResponse;
 import com.pluxurydolo.threads.dto.response.ErrorDetails;
 import com.pluxurydolo.threads.dto.response.PublishContainerResponse;
-import com.pluxurydolo.threads.exception.ThreadsImageUploadException;
 import com.pluxurydolo.threads.properties.ThreadsAuthProperties;
-import com.pluxurydolo.threads.token.AbstractTokenRetriever;
 import com.pluxurydolo.threads.step.ThreadsContainerPublisher;
 import com.pluxurydolo.threads.step.ThreadsContainerStatusPoller;
+import com.pluxurydolo.threads.token.AbstractTokenRetriever;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -77,7 +76,7 @@ class ThreadsImageUploaderTests {
         Mono<String> result = threadsImageUploader.upload(uploadMediaRequest());
 
         create(result)
-            .expectError(ThreadsImageUploadException.class)
+            .expectError(RuntimeException.class)
             .verify();
     }
 

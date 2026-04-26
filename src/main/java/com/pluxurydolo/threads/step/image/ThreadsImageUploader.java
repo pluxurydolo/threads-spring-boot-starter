@@ -1,24 +1,19 @@
 package com.pluxurydolo.threads.step.image;
 
 import com.pluxurydolo.threads.dto.Tokens;
-import com.pluxurydolo.threads.dto.request.upload.CreateContainerRequest;
 import com.pluxurydolo.threads.dto.request.upload.ContainerStatusRequest;
+import com.pluxurydolo.threads.dto.request.upload.CreateContainerRequest;
 import com.pluxurydolo.threads.dto.request.upload.PublishContainerRequest;
 import com.pluxurydolo.threads.dto.request.upload.UploadMediaRequest;
 import com.pluxurydolo.threads.dto.response.CreateContainerResponse;
 import com.pluxurydolo.threads.dto.response.PublishContainerResponse;
-import com.pluxurydolo.threads.exception.ThreadsImageUploadException;
 import com.pluxurydolo.threads.properties.ThreadsAuthProperties;
-import com.pluxurydolo.threads.token.AbstractTokenRetriever;
 import com.pluxurydolo.threads.step.ThreadsContainerPublisher;
 import com.pluxurydolo.threads.step.ThreadsContainerStatusPoller;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.pluxurydolo.threads.token.AbstractTokenRetriever;
 import reactor.core.publisher.Mono;
 
 public class ThreadsImageUploader {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ThreadsImageUploader.class);
-
     private final ThreadsImageContainerCreator threadsImageContainerCreator;
     private final ThreadsContainerStatusPoller threadsContainerStatusPoller;
     private final ThreadsContainerPublisher threadsContainerPublisher;
@@ -47,12 +42,7 @@ public class ThreadsImageUploader {
         return abstractTokenRetriever.retrieve()
             .map(Tokens::accessToken)
             .flatMap(accessToken -> uploadImage(imageUrl, caption, userId, accessToken))
-            .map(PublishContainerResponse::id)
-            .doOnSuccess(_ -> LOGGER.info("zujy [threads-starter] Изображение успешно опубликовано"))
-            .onErrorResume(throwable -> {
-                LOGGER.error("hlyy [threads-starter] Произошла ошибка при публикации изображения");
-                return Mono.error(new ThreadsImageUploadException(throwable));
-            });
+            .map(PublishContainerResponse::id);
     }
 
     private Mono<PublishContainerResponse> uploadImage(String imageUrl, String caption, String userId, String accessToken) {

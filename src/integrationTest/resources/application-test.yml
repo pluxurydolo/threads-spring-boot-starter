@@ -18,4 +18,4 @@ threads:
       zone: Europe/Moscow
   polling:
     max-repeat: 20
-    delay: 10s
+    delay: 1s
