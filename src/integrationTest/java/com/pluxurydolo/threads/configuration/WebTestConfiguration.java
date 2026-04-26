@@ -40,10 +40,13 @@ public class WebTestConfiguration {
 
         when(mock.createImageContainer(any()))
             .thenReturn(Mono.just(createContainerResponse()));
+
         when(mock.createVideoContainer(any()))
             .thenReturn(Mono.just(createContainerResponse()));
+
         when(mock.publishContainer(any()))
             .thenReturn(Mono.just(publishContainerResponse()));
+
         when(mock.getContainerStatus(any()))
             .thenReturn(Mono.just(containerStatusResponse()));
 
