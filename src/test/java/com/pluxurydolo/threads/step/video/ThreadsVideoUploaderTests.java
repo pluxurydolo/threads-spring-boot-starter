@@ -74,8 +74,7 @@ class ThreadsVideoUploaderTests {
         Mono<String> result = threadsVideoUploader.upload(uploadMediaRequest());
 
         create(result)
-            .expectError(RuntimeException.class)
-            .verify();
+            .verifyErrorMatches(throwable -> throwable.getClass().equals(RuntimeException.class));
     }
 
     private static UploadMediaRequest uploadMediaRequest() {

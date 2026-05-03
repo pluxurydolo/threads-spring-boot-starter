@@ -1,6 +1,7 @@
 package com.pluxurydolo.threads.client;
 
 import com.pluxurydolo.threads.dto.request.upload.UploadMediaRequest;
+import com.pluxurydolo.threads.exception.ThreadsVideoUploadException;
 import com.pluxurydolo.threads.step.video.ThreadsVideoUploader;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -42,8 +43,7 @@ class ThreadsVideoClientTests {
         Mono<String> result = threadsVideoClient.uploadVideo(uploadMediaRequest());
 
         create(result)
-            .expectError(RuntimeException.class)
-            .verify();
+            .verifyErrorMatches(throwable -> throwable.getClass().equals(ThreadsVideoUploadException.class));
     }
 
     private static UploadMediaRequest uploadMediaRequest() {

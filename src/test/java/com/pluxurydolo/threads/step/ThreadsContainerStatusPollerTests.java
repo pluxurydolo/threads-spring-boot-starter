@@ -58,8 +58,7 @@ class ThreadsContainerStatusPollerTests {
         Mono<String> result = threadsContainerStatusPoller.poll(createContainerStatusRequest());
 
         create(result)
-            .expectError(RuntimeException.class)
-            .verify();
+            .verifyErrorMatches(throwable -> throwable.getClass().equals(RuntimeException.class));
     }
 
     private static ContainerStatusRequest createContainerStatusRequest() {

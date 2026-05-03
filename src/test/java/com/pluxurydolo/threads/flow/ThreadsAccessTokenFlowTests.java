@@ -62,8 +62,7 @@ class ThreadsAccessTokenFlowTests {
         Mono<String> result = threadsAccessTokenFlow.getToken("exchangeToken");
 
         create(result)
-            .expectError(RuntimeException.class)
-            .verify();
+            .verifyErrorMatches(throwable -> throwable.getClass().equals(RuntimeException.class));
     }
 
     private static TokenResponse tokenResponse() {

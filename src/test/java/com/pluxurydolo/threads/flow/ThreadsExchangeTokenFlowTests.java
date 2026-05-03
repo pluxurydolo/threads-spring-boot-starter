@@ -57,8 +57,7 @@ class ThreadsExchangeTokenFlowTests {
         Mono<TokenResponse> result = threadsExchangeTokenFlow.getToken("code");
 
         create(result)
-            .expectError(RuntimeException.class)
-            .verify();
+            .verifyErrorMatches(throwable -> throwable.getClass().equals(RuntimeException.class));
     }
 
     private static TokenResponse tokenResponse() {

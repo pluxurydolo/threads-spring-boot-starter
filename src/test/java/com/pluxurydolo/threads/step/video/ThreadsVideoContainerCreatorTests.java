@@ -44,8 +44,7 @@ class ThreadsVideoContainerCreatorTests {
         Mono<CreateContainerResponse> result = threadsVideoContainerCreator.create(createContainerRequest());
 
         create(result)
-            .expectError(RuntimeException.class)
-            .verify();
+            .verifyErrorMatches(throwable -> throwable.getClass().equals(RuntimeException.class));
     }
 
     private static CreateContainerRequest createContainerRequest() {
