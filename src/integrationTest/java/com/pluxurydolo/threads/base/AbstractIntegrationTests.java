@@ -3,7 +3,6 @@ package com.pluxurydolo.threads.base;
 import com.pluxurydolo.threads.TestApplication;
 import com.pluxurydolo.threads.configuration.SchedulerTestConfiguration;
 import com.pluxurydolo.threads.configuration.TokensTestConfiguration;
-import com.pluxurydolo.threads.configuration.ValidatorTestConfiguration;
 import com.pluxurydolo.threads.configuration.WebTestConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
@@ -13,7 +12,6 @@ import static org.springframework.test.annotation.DirtiesContext.ClassMode.BEFOR
 @SpringBootTest(classes = {
     TestApplication.class,
     TokensTestConfiguration.class,
-    ValidatorTestConfiguration.class,
     SchedulerTestConfiguration.class,
     WebTestConfiguration.class
 })

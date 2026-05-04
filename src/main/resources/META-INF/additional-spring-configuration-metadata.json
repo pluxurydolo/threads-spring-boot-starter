@@ -28,31 +28,31 @@
       "name": "threads.endpoint.login",
       "type": "java.lang.String",
       "description": "Эндпоинт логина.",
-      "sourceType": "com.pluxurydolo.threads.properties.ThreadsEndpointProperties"
+      "sourceType": "com.pluxurydolo.threads.controller.ThreadsOAuthController"
     },
     {
       "name": "threads.endpoint.redirect",
       "type": "java.lang.String",
       "description": "Эндпоинт редиректа после логина.",
-      "sourceType": "com.pluxurydolo.threads.properties.ThreadsEndpointProperties"
+      "sourceType": "com.pluxurydolo.threads.controller.ThreadsOAuthController"
     },
     {
       "name": "threads.endpoint.refresh-token",
       "type": "java.lang.String",
       "description": "Эндпоинт для обновления токена.",
-      "sourceType": "com.pluxurydolo.threads.properties.ThreadsEndpointProperties"
+      "sourceType": "com.pluxurydolo.threads.controller.ThreadsOAuthController"
     },
     {
       "name": "threads.polling.max-repeat",
       "type": "java.lang.Integer",
       "description": "Максимальное число попыток поллинга.",
-      "sourceType": "com.pluxurydolo.threads.properties.ThreadsPollingProperties"
+      "sourceType": "com.pluxurydolo.threads.controller.ThreadsOAuthController"
     },
     {
       "name": "threads.polling.delay",
       "type": "java.time.Duration",
       "description": "Интервал поллинга.",
-      "sourceType": "com.pluxurydolo.threads.properties.ThreadsPollingProperties"
+      "sourceType": "com.pluxurydolo.threads.controller.ThreadsOAuthController"
     },
     {
       "name": "threads.scheduler.refresh-token.cron",
