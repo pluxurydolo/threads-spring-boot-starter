@@ -1,6 +1,6 @@
 package com.pluxurydolo.threads.scheduler.handler;
 
-import com.pluxurydolo.threads.dto.Tokens;
+import com.pluxurydolo.threads.dto.ThreadsTokens;
 import com.pluxurydolo.threads.scheduler.hook.RefreshTokenSchedulerHandlerHook;
 import com.pluxurydolo.threads.flow.ThreadsRefreshTokenFlow;
 import com.pluxurydolo.threads.token.AbstractTokenRetriever;
@@ -29,7 +29,7 @@ public class ThreadsRefreshTokenSchedulerHandler {
         LOGGER.info("dwus Стартовала джоба {}", jobName);
 
         return abstractTokenRetriever.retrieve()
-            .map(Tokens::accessToken)
+            .map(ThreadsTokens::accessToken)
             .flatMap(threadsRefreshTokenFlow::refreshToken)
             .flatMap(_ -> refreshTokenSchedulerHandlerHook.doAfter())
             .doOnSuccess(_ -> LOGGER.info("bgmk Джоба {} успешно завершена", jobName))

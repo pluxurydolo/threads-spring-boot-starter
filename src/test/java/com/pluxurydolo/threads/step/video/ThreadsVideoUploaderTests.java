@@ -1,6 +1,6 @@
 package com.pluxurydolo.threads.step.video;
 
-import com.pluxurydolo.threads.dto.Tokens;
+import com.pluxurydolo.threads.dto.ThreadsTokens;
 import com.pluxurydolo.threads.dto.request.upload.UploadMediaRequest;
 import com.pluxurydolo.threads.dto.response.CreateContainerResponse;
 import com.pluxurydolo.threads.dto.response.ErrorDetails;
@@ -51,7 +51,7 @@ class ThreadsVideoUploaderTests {
     @Test
     void testUpload() {
         when(abstractTokenRetriever.retrieve())
-            .thenReturn(Mono.just(tokens()));
+            .thenReturn(Mono.just(threadsTokens()));
         when(threadsVideoContainerCreator.create(any()))
             .thenReturn(Mono.just(createContainerResponse()));
         when(threadsContainerStatusPoller.poll(any()))
@@ -81,8 +81,8 @@ class ThreadsVideoUploaderTests {
         return new UploadMediaRequest("mediaUrl", "caption");
     }
 
-    private static Tokens tokens() {
-        return new Tokens("exchangeToken", "accessToken");
+    private static ThreadsTokens threadsTokens() {
+        return new ThreadsTokens("exchangeToken", "accessToken");
     }
 
     private static CreateContainerResponse createContainerResponse() {

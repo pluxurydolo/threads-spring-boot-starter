@@ -1,6 +1,6 @@
 package com.pluxurydolo.threads.scheduler.handler;
 
-import com.pluxurydolo.threads.dto.Tokens;
+import com.pluxurydolo.threads.dto.ThreadsTokens;
 import com.pluxurydolo.threads.scheduler.hook.RefreshTokenSchedulerHandlerHook;
 import com.pluxurydolo.threads.flow.ThreadsRefreshTokenFlow;
 import com.pluxurydolo.threads.token.AbstractTokenRetriever;
@@ -34,7 +34,7 @@ class ThreadsRefreshTokenSchedulerHandlerTests {
     @Test
     void testHandle() {
         when(abstractTokenRetriever.retrieve())
-            .thenReturn(Mono.just(tokens()));
+            .thenReturn(Mono.just(threadsTokens()));
         when(threadsRefreshTokenFlow.refreshToken(anyString()))
             .thenReturn(Mono.just(""));
         when(refreshTokenSchedulerHandlerHook.doAfter())
@@ -50,7 +50,7 @@ class ThreadsRefreshTokenSchedulerHandlerTests {
     @Test
     void testHandleWhenExceptionOccurred() {
         when(abstractTokenRetriever.retrieve())
-            .thenReturn(Mono.just(tokens()));
+            .thenReturn(Mono.just(threadsTokens()));
         when(threadsRefreshTokenFlow.refreshToken(anyString()))
             .thenReturn(Mono.error(new RuntimeException()));
         when(refreshTokenSchedulerHandlerHook.handleException(any(), anyString()))
@@ -63,7 +63,7 @@ class ThreadsRefreshTokenSchedulerHandlerTests {
             .verifyComplete();
     }
 
-    private static Tokens tokens() {
-        return new Tokens("exchangeToken", "accessToken");
+    private static ThreadsTokens threadsTokens() {
+        return new ThreadsTokens("exchangeToken", "accessToken");
     }
 }

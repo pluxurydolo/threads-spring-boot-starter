@@ -1,6 +1,6 @@
 package com.pluxurydolo.threads.step.image;
 
-import com.pluxurydolo.threads.dto.Tokens;
+import com.pluxurydolo.threads.dto.ThreadsTokens;
 import com.pluxurydolo.threads.dto.request.upload.UploadMediaRequest;
 import com.pluxurydolo.threads.dto.response.CreateContainerResponse;
 import com.pluxurydolo.threads.dto.response.ErrorDetails;
@@ -51,7 +51,7 @@ class ThreadsImageUploaderTests {
     @Test
     void testUpload() {
         when(abstractTokenRetriever.retrieve())
-            .thenReturn(Mono.just(tokens()));
+            .thenReturn(Mono.just(threadsTokens()));
         when(threadsImageContainerCreator.create(any()))
             .thenReturn(Mono.just(createContainerResponse()));
         when(threadsContainerStatusPoller.poll(any()))
@@ -69,7 +69,7 @@ class ThreadsImageUploaderTests {
     @Test
     void testUploadWhenExceptionOccurred() {
         when(abstractTokenRetriever.retrieve())
-            .thenReturn(Mono.just(tokens()));
+            .thenReturn(Mono.just(threadsTokens()));
         when(threadsImageContainerCreator.create(any()))
             .thenReturn(Mono.error(new RuntimeException()));
 
@@ -83,8 +83,8 @@ class ThreadsImageUploaderTests {
         return new UploadMediaRequest("mediaUrl", "caption");
     }
 
-    private static Tokens tokens() {
-        return new Tokens("exchangeToken", "accessToken");
+    private static ThreadsTokens threadsTokens() {
+        return new ThreadsTokens("exchangeToken", "accessToken");
     }
 
     private static CreateContainerResponse createContainerResponse() {

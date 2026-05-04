@@ -1,6 +1,6 @@
 package com.pluxurydolo.threads.service;
 
-import com.pluxurydolo.threads.dto.Tokens;
+import com.pluxurydolo.threads.dto.ThreadsTokens;
 import com.pluxurydolo.threads.dto.response.TokenResponse;
 import com.pluxurydolo.threads.flow.ThreadsAccessTokenFlow;
 import com.pluxurydolo.threads.flow.ThreadsAuthorizationCodeFlow;
@@ -92,7 +92,7 @@ class ThreadsOAuthServiceTests {
     @Test
     void testRefreshToken() {
         when(abstractTokenRetriever.retrieve())
-            .thenReturn(Mono.just(tokens()));
+            .thenReturn(Mono.just(threadsTokens()));
         when(threadsRefreshTokenFlow.refreshToken(anyString()))
             .thenReturn(Mono.just(""));
 
@@ -107,7 +107,7 @@ class ThreadsOAuthServiceTests {
         return new TokenResponse("accessToken", "tokenType", 1, 1L, "error", "errorDescription", "errorType");
     }
 
-    private static Tokens tokens() {
-        return new Tokens("exchangeToken", "accessToken");
+    private static ThreadsTokens threadsTokens() {
+        return new ThreadsTokens("exchangeToken", "accessToken");
     }
 }

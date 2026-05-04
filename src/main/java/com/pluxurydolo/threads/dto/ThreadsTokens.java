@@ -1,6 +1,6 @@
 package com.pluxurydolo.threads.dto;
 
-public record Tokens(
+public record ThreadsTokens(
     String exchangeToken,
     String accessToken
 ) {

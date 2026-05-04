@@ -1,6 +1,6 @@
 package com.pluxurydolo.threads.step.image;
 
-import com.pluxurydolo.threads.dto.Tokens;
+import com.pluxurydolo.threads.dto.ThreadsTokens;
 import com.pluxurydolo.threads.dto.request.upload.ContainerStatusRequest;
 import com.pluxurydolo.threads.dto.request.upload.CreateContainerRequest;
 import com.pluxurydolo.threads.dto.request.upload.PublishContainerRequest;
@@ -40,7 +40,7 @@ public class ThreadsImageUploader {
         String userId = threadsAuthProperties.userId();
 
         return abstractTokenRetriever.retrieve()
-            .map(Tokens::accessToken)
+            .map(ThreadsTokens::accessToken)
             .flatMap(accessToken -> uploadImage(imageUrl, caption, userId, accessToken))
             .map(PublishContainerResponse::id);
     }

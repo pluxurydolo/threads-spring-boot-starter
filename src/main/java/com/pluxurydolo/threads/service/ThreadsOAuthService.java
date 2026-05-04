@@ -1,6 +1,6 @@
 package com.pluxurydolo.threads.service;
 
-import com.pluxurydolo.threads.dto.Tokens;
+import com.pluxurydolo.threads.dto.ThreadsTokens;
 import com.pluxurydolo.threads.dto.response.TokenResponse;
 import com.pluxurydolo.threads.flow.ThreadsAccessTokenFlow;
 import com.pluxurydolo.threads.flow.ThreadsAuthorizationCodeFlow;
@@ -58,7 +58,7 @@ public class ThreadsOAuthService {
 
     public Mono<String> refreshToken() {
         return abstractTokenRetriever.retrieve()
-            .map(Tokens::accessToken)
+            .map(ThreadsTokens::accessToken)
             .flatMap(threadsRefreshTokenFlow::refreshToken)
             .subscribeOn(Schedulers.boundedElastic());
     }
