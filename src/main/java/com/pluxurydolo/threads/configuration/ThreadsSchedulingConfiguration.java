@@ -3,7 +3,7 @@ package com.pluxurydolo.threads.configuration;
 import com.pluxurydolo.threads.scheduler.ThreadsRefreshTokenScheduler;
 import com.pluxurydolo.threads.scheduler.handler.ThreadsRefreshTokenSchedulerHandler;
 import com.pluxurydolo.threads.scheduler.hook.RefreshTokenSchedulerHandlerHook;
-import com.pluxurydolo.threads.flow.ThreadsRefreshTokenFlow;
+import com.pluxurydolo.threads.flow.oauth.ThreadsRefreshTokenFlow;
 import com.pluxurydolo.threads.token.AbstractTokenRetriever;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
