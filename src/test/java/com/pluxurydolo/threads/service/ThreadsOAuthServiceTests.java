@@ -2,10 +2,10 @@ package com.pluxurydolo.threads.service;
 
 import com.pluxurydolo.threads.dto.ThreadsTokens;
 import com.pluxurydolo.threads.dto.response.TokenResponse;
-import com.pluxurydolo.threads.flow.ThreadsAccessTokenFlow;
-import com.pluxurydolo.threads.flow.ThreadsAuthorizationCodeFlow;
-import com.pluxurydolo.threads.flow.ThreadsExchangeTokenFlow;
-import com.pluxurydolo.threads.flow.ThreadsRefreshTokenFlow;
+import com.pluxurydolo.threads.flow.oauth.ThreadsAccessTokenFlow;
+import com.pluxurydolo.threads.flow.oauth.ThreadsAuthorizationCodeFlow;
+import com.pluxurydolo.threads.flow.oauth.ThreadsExchangeTokenFlow;
+import com.pluxurydolo.threads.flow.oauth.ThreadsRefreshTokenFlow;
 import com.pluxurydolo.threads.token.AbstractTokenRetriever;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

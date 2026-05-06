@@ -1,8 +1,8 @@
 package com.pluxurydolo.threads.client;
 
-import com.pluxurydolo.threads.dto.request.upload.UploadMediaRequest;
+import com.pluxurydolo.threads.dto.request.UploadMediaRequest;
 import com.pluxurydolo.threads.exception.ThreadsImageUploadException;
-import com.pluxurydolo.threads.step.image.ThreadsImageUploader;
+import com.pluxurydolo.threads.flow.publish.image.ThreadsImageUploader;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

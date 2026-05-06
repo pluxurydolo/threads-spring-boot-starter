@@ -1,13 +1,13 @@
-package com.pluxurydolo.threads.step.image;
+package com.pluxurydolo.threads.flow.publish.image;
 
 import com.pluxurydolo.threads.dto.ThreadsTokens;
-import com.pluxurydolo.threads.dto.request.upload.UploadMediaRequest;
+import com.pluxurydolo.threads.dto.request.UploadMediaRequest;
 import com.pluxurydolo.threads.dto.response.CreateContainerResponse;
 import com.pluxurydolo.threads.dto.response.ErrorDetails;
 import com.pluxurydolo.threads.dto.response.PublishContainerResponse;
 import com.pluxurydolo.threads.properties.ThreadsAuthProperties;
-import com.pluxurydolo.threads.step.ThreadsContainerPublisher;
-import com.pluxurydolo.threads.step.ThreadsContainerStatusPoller;
+import com.pluxurydolo.threads.flow.publish.ThreadsContainerPublisher;
+import com.pluxurydolo.threads.flow.publish.ThreadsContainerStatusPoller;
 import com.pluxurydolo.threads.token.AbstractTokenRetriever;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
