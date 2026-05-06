@@ -1,4 +1,4 @@
-package com.pluxurydolo.threads.flow;
+package com.pluxurydolo.threads.flow.oauth;
 
 import com.pluxurydolo.threads.properties.ThreadsAuthProperties;
 import org.junit.jupiter.api.Test;
