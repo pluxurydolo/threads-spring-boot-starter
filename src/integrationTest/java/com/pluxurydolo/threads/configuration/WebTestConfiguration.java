@@ -5,13 +5,13 @@ import com.pluxurydolo.threads.dto.response.CreateContainerResponse;
 import com.pluxurydolo.threads.dto.response.ErrorDetails;
 import com.pluxurydolo.threads.dto.response.PublishContainerResponse;
 import com.pluxurydolo.threads.dto.response.TokenResponse;
-import com.pluxurydolo.threads.web.ThreadsApiWebClient;
-import com.pluxurydolo.threads.web.ThreadsUploadWebClient;
+import com.pluxurydolo.threads.web.ThreadsApiHttpClient;
+import com.pluxurydolo.threads.web.ThreadsUploadHttpClient;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import reactor.core.publisher.Mono;
 
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -19,30 +19,30 @@ import static org.mockito.Mockito.when;
 public class WebTestConfiguration {
 
     @Bean
-    public ThreadsApiWebClient threadsApiWebClient() {
-        ThreadsApiWebClient mock = mock(ThreadsApiWebClient.class);
+    public ThreadsApiHttpClient threadsApiHttpClient() {
+        ThreadsApiHttpClient mock = mock(ThreadsApiHttpClient.class);
 
-        when(mock.getAccessToken(any()))
+        when(mock.getExchangeToken(anyString(), anyString(), anyString(), anyString(), anyString()))
             .thenReturn(Mono.just(tokenResponse()));
-        when(mock.getExchangeToken(any()))
+        when(mock.getAccessToken(anyString(), anyString(), anyString()))
             .thenReturn(Mono.just(tokenResponse()));
-        when(mock.refreshToken(any()))
+        when(mock.refreshToken(anyString(), anyString()))
             .thenReturn(Mono.just(tokenResponse()));
 
         return mock;
     }
 
     @Bean
-    public ThreadsUploadWebClient threadsUploadWebClient() {
-        ThreadsUploadWebClient mock = mock(ThreadsUploadWebClient.class);
+    public ThreadsUploadHttpClient threadsUploadHttpClient() {
+        ThreadsUploadHttpClient mock = mock(ThreadsUploadHttpClient.class);
 
-        when(mock.createImageContainer(any()))
+        when(mock.createImageContainer(anyString(), anyString(), anyString(), anyString(), anyString()))
             .thenReturn(Mono.just(createContainerResponse()));
-        when(mock.createVideoContainer(any()))
+        when(mock.createVideoContainer(anyString(), anyString(), anyString(), anyString(), anyString()))
             .thenReturn(Mono.just(createContainerResponse()));
-        when(mock.publishContainer(any()))
+        when(mock.publishContainer(anyString(), anyString(), anyString()))
             .thenReturn(Mono.just(publishContainerResponse()));
-        when(mock.getContainerStatus(any()))
+        when(mock.getContainerStatus(anyString(), anyString(), anyString()))
             .thenReturn(Mono.just(containerStatusResponse()));
 
         return mock;
