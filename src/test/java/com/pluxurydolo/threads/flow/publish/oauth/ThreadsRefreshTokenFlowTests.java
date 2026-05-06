@@ -1,8 +1,10 @@
-package com.pluxurydolo.threads.flow;
+package com.pluxurydolo.threads.flow.publish.oauth;
 
 import com.pluxurydolo.threads.dto.response.TokenResponse;
+import com.pluxurydolo.threads.exception.ThreadsRefreshTokenFlowException;
+import com.pluxurydolo.threads.flow.oauth.ThreadsRefreshTokenFlow;
 import com.pluxurydolo.threads.token.AbstractTokenSaver;
-import com.pluxurydolo.threads.web.ThreadsApiWebClient;
+import com.pluxurydolo.threads.web.ThreadsApiHttpClient;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -19,7 +21,7 @@ import static reactor.test.StepVerifier.create;
 class ThreadsRefreshTokenFlowTests {
 
     @Mock
-    private ThreadsApiWebClient threadsApiWebClient;
+    private ThreadsApiHttpClient threadsApiHttpClient;
 
     @Mock
     private AbstractTokenSaver abstractTokenSaver;
@@ -29,7 +31,7 @@ class ThreadsRefreshTokenFlowTests {
 
     @Test
     void testRefreshToken() {
-        when(threadsApiWebClient.refreshToken(any()))
+        when(threadsApiHttpClient.refreshToken(anyString(), anyString()))
             .thenReturn(Mono.just(tokenResponse()));
         when(abstractTokenSaver.save(any(), anyString()))
             .thenReturn(Mono.just(""));
@@ -43,13 +45,13 @@ class ThreadsRefreshTokenFlowTests {
 
     @Test
     void testRefreshTokenWhenExceptionOccurred() {
-        when(threadsApiWebClient.refreshToken(any()))
+        when(threadsApiHttpClient.refreshToken(anyString(), anyString()))
             .thenReturn(Mono.error(new RuntimeException()));
 
         Mono<String> result = threadsRefreshTokenFlow.refreshToken("currentToken");
 
         create(result)
-            .verifyErrorMatches(throwable -> throwable.getClass().equals(RuntimeException.class));
+            .verifyErrorMatches(throwable -> throwable.getClass().equals(ThreadsRefreshTokenFlowException.class));
     }
 
     private static TokenResponse tokenResponse() {
