@@ -1,9 +1,10 @@
-package com.pluxurydolo.threads.step.video;
+package com.pluxurydolo.threads.flow.publish.video;
 
-import com.pluxurydolo.threads.dto.request.upload.CreateContainerRequest;
+import com.pluxurydolo.threads.dto.request.CreateContainerRequest;
 import com.pluxurydolo.threads.dto.response.CreateContainerResponse;
 import com.pluxurydolo.threads.dto.response.ErrorDetails;
-import com.pluxurydolo.threads.web.ThreadsUploadWebClient;
+import com.pluxurydolo.threads.exception.ThreadsCreateImageContainerException;
+import com.pluxurydolo.threads.web.ThreadsUploadHttpClient;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -11,7 +12,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import reactor.core.publisher.Mono;
 
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static reactor.test.StepVerifier.create;
 
@@ -19,14 +20,14 @@ import static reactor.test.StepVerifier.create;
 class ThreadsVideoContainerCreatorTests {
 
     @Mock
-    private ThreadsUploadWebClient threadsUploadWebClient;
+    private ThreadsUploadHttpClient threadsUploadHttpClient;
 
     @InjectMocks
     private ThreadsVideoContainerCreator threadsVideoContainerCreator;
 
     @Test
     void testCreate() {
-        when(threadsUploadWebClient.createVideoContainer(any()))
+        when(threadsUploadHttpClient.createVideoContainer(anyString(), anyString(), anyString(), anyString(), anyString()))
             .thenReturn(Mono.just(createContainerResponse()));
 
         Mono<CreateContainerResponse> result = threadsVideoContainerCreator.create(createContainerRequest());
@@ -38,13 +39,13 @@ class ThreadsVideoContainerCreatorTests {
 
     @Test
     void testCreateWhenExceptionOccurred() {
-        when(threadsUploadWebClient.createVideoContainer(any()))
+        when(threadsUploadHttpClient.createVideoContainer(anyString(), anyString(), anyString(), anyString(), anyString()))
             .thenReturn(Mono.error(new RuntimeException()));
 
         Mono<CreateContainerResponse> result = threadsVideoContainerCreator.create(createContainerRequest());
 
         create(result)
-            .verifyErrorMatches(throwable -> throwable.getClass().equals(RuntimeException.class));
+            .verifyErrorMatches(throwable -> throwable.getClass().equals(ThreadsCreateImageContainerException.class));
     }
 
     private static CreateContainerRequest createContainerRequest() {
