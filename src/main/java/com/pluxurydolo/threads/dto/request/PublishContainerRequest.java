@@ -1,4 +1,4 @@
-package com.pluxurydolo.threads.dto.request.upload;
+package com.pluxurydolo.threads.dto.request;
 
 public record PublishContainerRequest(
     String containerId,
