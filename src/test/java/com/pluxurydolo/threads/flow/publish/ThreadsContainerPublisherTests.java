@@ -1,9 +1,10 @@
-package com.pluxurydolo.threads.step;
+package com.pluxurydolo.threads.flow.publish;
 
-import com.pluxurydolo.threads.dto.request.upload.PublishContainerRequest;
+import com.pluxurydolo.threads.dto.request.PublishContainerRequest;
 import com.pluxurydolo.threads.dto.response.ErrorDetails;
 import com.pluxurydolo.threads.dto.response.PublishContainerResponse;
-import com.pluxurydolo.threads.web.ThreadsUploadWebClient;
+import com.pluxurydolo.threads.exception.ThreadsPublishImageContainerException;
+import com.pluxurydolo.threads.web.ThreadsUploadHttpClient;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -11,7 +12,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import reactor.core.publisher.Mono;
 
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static reactor.test.StepVerifier.create;
 
@@ -19,14 +20,14 @@ import static reactor.test.StepVerifier.create;
 class ThreadsContainerPublisherTests {
 
     @Mock
-    private ThreadsUploadWebClient threadsUploadWebClient;
+    private ThreadsUploadHttpClient threadsUploadHttpClient;
 
     @InjectMocks
     private ThreadsContainerPublisher threadsContainerPublisher;
 
     @Test
     void testPublish() {
-        when(threadsUploadWebClient.publishContainer(any()))
+        when(threadsUploadHttpClient.publishContainer(anyString(), anyString(), anyString()))
             .thenReturn(Mono.just(publishContainerResponse()));
 
         Mono<PublishContainerResponse> result = threadsContainerPublisher.publish(publishContainerRequest());
@@ -38,13 +39,13 @@ class ThreadsContainerPublisherTests {
 
     @Test
     void testPublishWhenExceptionOccurred() {
-        when(threadsUploadWebClient.publishContainer(any()))
+        when(threadsUploadHttpClient.publishContainer(anyString(), anyString(), anyString()))
             .thenReturn(Mono.error(new RuntimeException()));
 
         Mono<PublishContainerResponse> result = threadsContainerPublisher.publish(publishContainerRequest());
 
         create(result)
-            .verifyErrorMatches(throwable -> throwable.getClass().equals(RuntimeException.class));
+            .verifyErrorMatches(throwable -> throwable.getClass().equals(ThreadsPublishImageContainerException.class));
     }
 
     private static PublishContainerRequest publishContainerRequest() {

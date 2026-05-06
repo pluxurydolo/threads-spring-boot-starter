@@ -1,9 +1,10 @@
-package com.pluxurydolo.threads.step;
+package com.pluxurydolo.threads.flow.publish;
 
-import com.pluxurydolo.threads.dto.request.upload.ContainerStatusRequest;
+import com.pluxurydolo.threads.dto.request.ContainerStatusRequest;
 import com.pluxurydolo.threads.dto.response.ContainerStatusResponse;
+import com.pluxurydolo.threads.exception.ThreadsImageContainerStatusException;
 import com.pluxurydolo.threads.properties.ThreadsPollingProperties;
-import com.pluxurydolo.threads.web.ThreadsUploadWebClient;
+import com.pluxurydolo.threads.web.ThreadsUploadHttpClient;
 import org.reactivestreams.Publisher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,14 +18,14 @@ import java.util.function.Function;
 public class ThreadsContainerStatusPoller {
     private static final Logger LOGGER = LoggerFactory.getLogger(ThreadsContainerStatusPoller.class);
 
-    private final ThreadsUploadWebClient threadsUploadWebClient;
+    private final ThreadsUploadHttpClient threadsUploadHttpClient;
     private final ThreadsPollingProperties threadsPollingProperties;
 
     public ThreadsContainerStatusPoller(
-        ThreadsUploadWebClient threadsUploadWebClient,
+        ThreadsUploadHttpClient threadsUploadHttpClient,
         ThreadsPollingProperties threadsPollingProperties
     ) {
-        this.threadsUploadWebClient = threadsUploadWebClient;
+        this.threadsUploadHttpClient = threadsUploadHttpClient;
         this.threadsPollingProperties = threadsPollingProperties;
     }
 
@@ -45,9 +46,17 @@ public class ThreadsContainerStatusPoller {
     }
 
     private Mono<String> validateContainerStatus(ContainerStatusRequest request) {
-        return threadsUploadWebClient.getContainerStatus(request)
+        String containerId = request.containerId();
+        String accessToken = request.accessToken();
+        String fields = "status,error_message";
+
+        return threadsUploadHttpClient.getContainerStatus(containerId, fields, accessToken)
             .map(ContainerStatusResponse::status)
             .doOnNext(status -> LOGGER.info("hnlr [threads-starter] Статус контейнера: {}", status))
+            .onErrorResume(throwable -> {
+                LOGGER.error("tyrx [threads-starter] Произошла ошибка при проверке статуса контейнера {}", containerId);
+                return Mono.error(new ThreadsImageContainerStatusException(throwable));
+            })
             .filter("FINISHED"::equals);
     }
 }
