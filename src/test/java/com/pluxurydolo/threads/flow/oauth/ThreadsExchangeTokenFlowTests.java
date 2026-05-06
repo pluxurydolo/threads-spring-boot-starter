@@ -1,8 +1,9 @@
-package com.pluxurydolo.threads.flow;
+package com.pluxurydolo.threads.flow.oauth;
 
 import com.pluxurydolo.threads.dto.response.TokenResponse;
+import com.pluxurydolo.threads.exception.ThreadsExchangeTokenFlowException;
 import com.pluxurydolo.threads.properties.ThreadsAuthProperties;
-import com.pluxurydolo.threads.web.ThreadsApiWebClient;
+import com.pluxurydolo.threads.web.ThreadsApiHttpClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,7 +12,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import reactor.core.publisher.Mono;
 
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static reactor.test.StepVerifier.create;
 
@@ -19,7 +20,7 @@ import static reactor.test.StepVerifier.create;
 class ThreadsExchangeTokenFlowTests {
 
     @Mock
-    private ThreadsApiWebClient threadsApiWebClient;
+    private ThreadsApiHttpClient threadsApiHttpClient;
 
     @Mock
     private ThreadsAuthProperties threadsAuthProperties;
@@ -39,7 +40,7 @@ class ThreadsExchangeTokenFlowTests {
 
     @Test
     void testGetToken() {
-        when(threadsApiWebClient.getExchangeToken(any()))
+        when(threadsApiHttpClient.getExchangeToken(anyString(), anyString(), anyString(), anyString(), anyString()))
             .thenReturn(Mono.just(tokenResponse()));
 
         Mono<TokenResponse> result = threadsExchangeTokenFlow.getToken("code");
@@ -51,13 +52,13 @@ class ThreadsExchangeTokenFlowTests {
 
     @Test
     void testGetTokenWhenExceptionOccurred() {
-        when(threadsApiWebClient.getExchangeToken(any()))
+        when(threadsApiHttpClient.getExchangeToken(anyString(), anyString(), anyString(), anyString(), anyString()))
             .thenReturn(Mono.error(new RuntimeException()));
 
         Mono<TokenResponse> result = threadsExchangeTokenFlow.getToken("code");
 
         create(result)
-            .verifyErrorMatches(throwable -> throwable.getClass().equals(RuntimeException.class));
+            .verifyErrorMatches(throwable -> throwable.getClass().equals(ThreadsExchangeTokenFlowException.class));
     }
 
     private static TokenResponse tokenResponse() {

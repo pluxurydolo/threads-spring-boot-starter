@@ -1,17 +1,23 @@
 package com.pluxurydolo.threads.configuration;
 
 import com.pluxurydolo.threads.controller.ThreadsOAuthController;
-import com.pluxurydolo.threads.flow.ThreadsAccessTokenFlow;
-import com.pluxurydolo.threads.flow.ThreadsAuthorizationCodeFlow;
-import com.pluxurydolo.threads.flow.ThreadsExchangeTokenFlow;
-import com.pluxurydolo.threads.flow.ThreadsRefreshTokenFlow;
+import com.pluxurydolo.threads.flow.oauth.ThreadsAccessTokenFlow;
+import com.pluxurydolo.threads.flow.oauth.ThreadsAuthorizationCodeFlow;
+import com.pluxurydolo.threads.flow.oauth.ThreadsExchangeTokenFlow;
+import com.pluxurydolo.threads.flow.oauth.ThreadsRefreshTokenFlow;
 import com.pluxurydolo.threads.service.ThreadsOAuthService;
 import com.pluxurydolo.threads.token.AbstractTokenRetriever;
-import com.pluxurydolo.threads.web.ThreadsApiWebClient;
-import com.pluxurydolo.threads.web.ThreadsUploadWebClient;
+import com.pluxurydolo.threads.web.ThreadsApiHttpClient;
+import com.pluxurydolo.threads.web.ThreadsUploadHttpClient;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.codec.ClientCodecConfigurer;
+import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.support.WebClientAdapter;
+import org.springframework.web.service.invoker.HttpServiceProxyFactory;
+
+import java.util.function.Consumer;
 
 @Configuration
 public class ThreadsWebConfiguration {
@@ -42,13 +48,32 @@ public class ThreadsWebConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public ThreadsApiWebClient threadsApiWebClient() {
-        return new ThreadsApiWebClient();
+    public ThreadsApiHttpClient threadsApiHttpClient() {
+        WebClient webClient = WebClient.builder()
+            .build();
+
+        WebClientAdapter exchangeAdapter = WebClientAdapter.create(webClient);
+
+        return HttpServiceProxyFactory.builderFor(exchangeAdapter)
+            .build()
+            .createClient(ThreadsApiHttpClient.class);
     }
 
     @Bean
     @ConditionalOnMissingBean
-    public ThreadsUploadWebClient threadsUploadWebClient() {
-        return new ThreadsUploadWebClient();
+    public ThreadsUploadHttpClient threadsUploadHttpClient() {
+        Consumer<ClientCodecConfigurer> codec = configurer -> configurer
+            .defaultCodecs()
+            .maxInMemorySize(16 * 1024 * 1024);
+
+        WebClient webClient = WebClient.builder()
+            .codecs(codec)
+            .build();
+
+        WebClientAdapter exchangeAdapter = WebClientAdapter.create(webClient);
+
+        return HttpServiceProxyFactory.builderFor(exchangeAdapter)
+            .build()
+            .createClient(ThreadsUploadHttpClient.class);
     }
 }

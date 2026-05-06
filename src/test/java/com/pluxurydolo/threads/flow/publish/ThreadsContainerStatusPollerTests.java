@@ -1,10 +1,11 @@
-package com.pluxurydolo.threads.step;
+package com.pluxurydolo.threads.flow.publish;
 
-import com.pluxurydolo.threads.dto.request.upload.ContainerStatusRequest;
+import com.pluxurydolo.threads.dto.request.ContainerStatusRequest;
 import com.pluxurydolo.threads.dto.response.ContainerStatusResponse;
 import com.pluxurydolo.threads.dto.response.ErrorDetails;
+import com.pluxurydolo.threads.exception.ThreadsImageContainerStatusException;
 import com.pluxurydolo.threads.properties.ThreadsPollingProperties;
-import com.pluxurydolo.threads.web.ThreadsUploadWebClient;
+import com.pluxurydolo.threads.web.ThreadsUploadHttpClient;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -14,7 +15,7 @@ import reactor.core.publisher.Mono;
 
 import java.time.Duration;
 
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static reactor.test.StepVerifier.create;
 
@@ -22,7 +23,7 @@ import static reactor.test.StepVerifier.create;
 class ThreadsContainerStatusPollerTests {
 
     @Mock
-    private ThreadsUploadWebClient threadsUploadWebClient;
+    private ThreadsUploadHttpClient threadsUploadHttpClient;
 
     @Mock
     private ThreadsPollingProperties threadsPollingProperties;
@@ -36,7 +37,7 @@ class ThreadsContainerStatusPollerTests {
             .thenReturn(Duration.ofSeconds(1));
         when(threadsPollingProperties.maxRepeat())
             .thenReturn(100);
-        when(threadsUploadWebClient.getContainerStatus(any()))
+        when(threadsUploadHttpClient.getContainerStatus(anyString(), anyString(), anyString()))
             .thenReturn(Mono.just(containerStatusResponse()));
 
         Mono<String> result = threadsContainerStatusPoller.poll(createContainerStatusRequest());
@@ -52,13 +53,13 @@ class ThreadsContainerStatusPollerTests {
             .thenReturn(Duration.ofSeconds(1));
         when(threadsPollingProperties.maxRepeat())
             .thenReturn(100);
-        when(threadsUploadWebClient.getContainerStatus(any()))
+        when(threadsUploadHttpClient.getContainerStatus(anyString(), anyString(), anyString()))
             .thenReturn(Mono.error(new RuntimeException()));
 
         Mono<String> result = threadsContainerStatusPoller.poll(createContainerStatusRequest());
 
         create(result)
-            .verifyErrorMatches(throwable -> throwable.getClass().equals(RuntimeException.class));
+            .verifyErrorMatches(throwable -> throwable.getClass().equals(ThreadsImageContainerStatusException.class));
     }
 
     private static ContainerStatusRequest createContainerStatusRequest() {
