@@ -1,8 +1,7 @@
-package com.pluxurydolo.threads.flow.publish.oauth;
+package com.pluxurydolo.threads.flow.oauth;
 
 import com.pluxurydolo.threads.dto.response.TokenResponse;
 import com.pluxurydolo.threads.exception.ThreadsRefreshTokenFlowException;
-import com.pluxurydolo.threads.flow.oauth.ThreadsRefreshTokenFlow;
 import com.pluxurydolo.threads.token.AbstractTokenSaver;
 import com.pluxurydolo.threads.web.ThreadsApiHttpClient;
 import org.junit.jupiter.api.Test;
