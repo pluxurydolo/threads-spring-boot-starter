@@ -2,7 +2,7 @@ package com.pluxurydolo.threads.scheduler.handler;
 
 import com.pluxurydolo.threads.dto.ThreadsTokens;
 import com.pluxurydolo.threads.scheduler.hook.RefreshTokenSchedulerHandlerHook;
-import com.pluxurydolo.threads.flow.ThreadsRefreshTokenFlow;
+import com.pluxurydolo.threads.flow.oauth.ThreadsRefreshTokenFlow;
 import com.pluxurydolo.threads.token.AbstractTokenRetriever;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

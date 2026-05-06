@@ -1,8 +1,8 @@
 package com.pluxurydolo.threads.client;
 
-import com.pluxurydolo.threads.dto.request.upload.UploadMediaRequest;
+import com.pluxurydolo.threads.dto.request.UploadMediaRequest;
 import com.pluxurydolo.threads.exception.ThreadsVideoUploadException;
-import com.pluxurydolo.threads.step.video.ThreadsVideoUploader;
+import com.pluxurydolo.threads.flow.publish.video.ThreadsVideoUploader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import reactor.core.publisher.Mono;

@@ -1,15 +1,15 @@
-package com.pluxurydolo.threads.step.video;
+package com.pluxurydolo.threads.flow.publish.video;
 
 import com.pluxurydolo.threads.dto.ThreadsTokens;
-import com.pluxurydolo.threads.dto.request.upload.ContainerStatusRequest;
-import com.pluxurydolo.threads.dto.request.upload.CreateContainerRequest;
-import com.pluxurydolo.threads.dto.request.upload.PublishContainerRequest;
-import com.pluxurydolo.threads.dto.request.upload.UploadMediaRequest;
+import com.pluxurydolo.threads.dto.request.ContainerStatusRequest;
+import com.pluxurydolo.threads.dto.request.CreateContainerRequest;
+import com.pluxurydolo.threads.dto.request.PublishContainerRequest;
+import com.pluxurydolo.threads.dto.request.UploadMediaRequest;
 import com.pluxurydolo.threads.dto.response.CreateContainerResponse;
 import com.pluxurydolo.threads.dto.response.PublishContainerResponse;
 import com.pluxurydolo.threads.properties.ThreadsAuthProperties;
-import com.pluxurydolo.threads.step.ThreadsContainerPublisher;
-import com.pluxurydolo.threads.step.ThreadsContainerStatusPoller;
+import com.pluxurydolo.threads.flow.publish.ThreadsContainerPublisher;
+import com.pluxurydolo.threads.flow.publish.ThreadsContainerStatusPoller;
 import com.pluxurydolo.threads.token.AbstractTokenRetriever;
 import reactor.core.publisher.Mono;
 
