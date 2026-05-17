@@ -26,15 +26,15 @@ public class ThreadsRefreshTokenSchedulerHandler {
     }
 
     public Mono<String> handle(String jobName) {
-        LOGGER.info("dwus Стартовала джоба {}", jobName);
+        LOGGER.info("dwus [threads-starter] Стартовала джоба {}", jobName);
 
         return abstractTokenRetriever.retrieve()
             .map(ThreadsTokens::accessToken)
             .flatMap(threadsRefreshTokenFlow::refreshToken)
             .flatMap(_ -> refreshTokenSchedulerHandlerHook.doAfter())
-            .doOnSuccess(_ -> LOGGER.info("bgmk Джоба {} успешно завершена", jobName))
+            .doOnSuccess(_ -> LOGGER.info("bgmk [threads-starter] Джоба {} успешно завершена", jobName))
             .onErrorResume(throwable -> {
-                LOGGER.error("itet Джоба {} успешно завершена", jobName);
+                LOGGER.error("itet [threads-starter] Джоба {} успешно завершена", jobName);
                 return refreshTokenSchedulerHandlerHook.handleException(throwable, jobName);
             });
     }
