@@ -3,10 +3,8 @@ package com.pluxurydolo.threads.configuration;
 import com.pluxurydolo.threads.controller.ThreadsOAuthController;
 import com.pluxurydolo.threads.flow.oauth.ThreadsAccessTokenFlow;
 import com.pluxurydolo.threads.flow.oauth.ThreadsAuthorizationCodeFlow;
-import com.pluxurydolo.threads.flow.oauth.ThreadsExchangeTokenFlow;
 import com.pluxurydolo.threads.flow.oauth.ThreadsRefreshTokenFlow;
 import com.pluxurydolo.threads.service.ThreadsOAuthService;
-import com.pluxurydolo.threads.token.AbstractTokenRetriever;
 import com.pluxurydolo.threads.web.ThreadsApiHttpClient;
 import com.pluxurydolo.threads.web.ThreadsUploadHttpClient;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -32,18 +30,10 @@ public class ThreadsWebConfiguration {
     @ConditionalOnMissingBean
     public ThreadsOAuthService threadsOAuthService(
         ThreadsAuthorizationCodeFlow threadsAuthorizationCodeFlow,
-        ThreadsExchangeTokenFlow threadsExchangeTokenFlow,
         ThreadsAccessTokenFlow threadsAccessTokenFlow,
-        ThreadsRefreshTokenFlow threadsRefreshTokenFlow,
-        AbstractTokenRetriever abstractTokenRetriever
+        ThreadsRefreshTokenFlow threadsRefreshTokenFlow
     ) {
-        return new ThreadsOAuthService(
-            threadsAuthorizationCodeFlow,
-            threadsExchangeTokenFlow,
-            threadsAccessTokenFlow,
-            threadsRefreshTokenFlow,
-            abstractTokenRetriever
-        );
+        return new ThreadsOAuthService(threadsAuthorizationCodeFlow, threadsAccessTokenFlow, threadsRefreshTokenFlow);
     }
 
     @Bean

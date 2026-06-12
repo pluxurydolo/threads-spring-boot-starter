@@ -28,6 +28,6 @@ public interface ThreadsApiHttpClient {
     @GetExchange("/refresh_access_token")
     Mono<TokenResponse> refreshToken(
         @RequestParam("grant_type") String grantType,
-        @RequestParam("access_token") String accessToken
+        @RequestParam("access_token") String exchangeToken
     );
 }

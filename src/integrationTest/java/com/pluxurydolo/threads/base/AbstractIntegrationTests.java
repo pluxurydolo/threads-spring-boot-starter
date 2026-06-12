@@ -1,7 +1,7 @@
 package com.pluxurydolo.threads.base;
 
 import com.pluxurydolo.threads.TestApplication;
-import com.pluxurydolo.threads.configuration.SchedulerTestConfiguration;
+import com.pluxurydolo.threads.configuration.HookTestConfiguration;
 import com.pluxurydolo.threads.configuration.TokensTestConfiguration;
 import com.pluxurydolo.threads.configuration.WebTestConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,7 +12,7 @@ import static org.springframework.test.annotation.DirtiesContext.ClassMode.BEFOR
 @SpringBootTest(classes = {
     TestApplication.class,
     TokensTestConfiguration.class,
-    SchedulerTestConfiguration.class,
+    HookTestConfiguration.class,
     WebTestConfiguration.class
 })
 @DirtiesContext(classMode = BEFORE_EACH_TEST_METHOD)

@@ -1,7 +1,9 @@
 package com.pluxurydolo.threads.flow.oauth;
 
+import com.pluxurydolo.threads.dto.ThreadsTokens;
 import com.pluxurydolo.threads.dto.response.TokenResponse;
-import com.pluxurydolo.threads.exception.ThreadsRefreshTokenFlowException;
+import com.pluxurydolo.threads.flow.oauth.hook.RefreshTokenFlowHook;
+import com.pluxurydolo.threads.token.AbstractTokenRetriever;
 import com.pluxurydolo.threads.token.AbstractTokenSaver;
 import com.pluxurydolo.threads.web.ThreadsApiHttpClient;
 import org.junit.jupiter.api.Test;
@@ -23,34 +25,53 @@ class ThreadsRefreshTokenFlowTests {
     private ThreadsApiHttpClient threadsApiHttpClient;
 
     @Mock
+    private AbstractTokenRetriever abstractTokenRetriever;
+
+    @Mock
     private AbstractTokenSaver abstractTokenSaver;
+
+    @Mock
+    private RefreshTokenFlowHook refreshTokenFlowHook;
 
     @InjectMocks
     private ThreadsRefreshTokenFlow threadsRefreshTokenFlow;
 
     @Test
     void testRefreshToken() {
+        when(abstractTokenRetriever.retrieve())
+            .thenReturn(Mono.just(threadsTokens()));
         when(threadsApiHttpClient.refreshToken(anyString(), anyString()))
             .thenReturn(Mono.just(tokenResponse()));
         when(abstractTokenSaver.save(any(), anyString()))
             .thenReturn(Mono.just(""));
+        when(refreshTokenFlowHook.doAfter())
+            .thenReturn(Mono.just(""));
 
-        Mono<String> result = threadsRefreshTokenFlow.refreshToken("currentToken");
+        Mono<String> result = threadsRefreshTokenFlow.refreshToken();
+
+        create(result)
+            .expectNext("SUCCESS")
+            .verifyComplete();
+    }
+
+    @Test
+    void testRefreshTokenWhenExceptionOccurred() {
+        when(abstractTokenRetriever.retrieve())
+            .thenReturn(Mono.just(threadsTokens()));
+        when(threadsApiHttpClient.refreshToken(anyString(), anyString()))
+            .thenReturn(Mono.error(new RuntimeException()));
+        when(refreshTokenFlowHook.handleException(any()))
+            .thenReturn(Mono.just(""));
+
+        Mono<String> result = threadsRefreshTokenFlow.refreshToken();
 
         create(result)
             .expectNext("")
             .verifyComplete();
     }
 
-    @Test
-    void testRefreshTokenWhenExceptionOccurred() {
-        when(threadsApiHttpClient.refreshToken(anyString(), anyString()))
-            .thenReturn(Mono.error(new RuntimeException()));
-
-        Mono<String> result = threadsRefreshTokenFlow.refreshToken("currentToken");
-
-        create(result)
-            .verifyErrorMatches(throwable -> throwable.getClass().equals(ThreadsRefreshTokenFlowException.class));
+    private static ThreadsTokens threadsTokens() {
+        return new ThreadsTokens("exchangeToken", "accessToken");
     }
 
     private static TokenResponse tokenResponse() {

@@ -1,7 +1,7 @@
 package com.pluxurydolo.threads.flow.oauth;
 
 import com.pluxurydolo.threads.dto.response.TokenResponse;
-import com.pluxurydolo.threads.exception.ThreadsAccessTokenFlowException;
+import com.pluxurydolo.threads.flow.oauth.hook.AccessTokenFlowHook;
 import com.pluxurydolo.threads.properties.ThreadsAuthProperties;
 import com.pluxurydolo.threads.token.AbstractTokenSaver;
 import com.pluxurydolo.threads.web.ThreadsApiHttpClient;
@@ -30,38 +30,52 @@ class ThreadsAccessTokenFlowTests {
     @Mock
     private AbstractTokenSaver abstractTokenSaver;
 
+    @Mock
+    private AccessTokenFlowHook accessTokenFlowHook;
+
     @InjectMocks
     private ThreadsAccessTokenFlow threadsAccessTokenFlow;
 
     @BeforeEach
     void setUp() {
+        when(threadsAuthProperties.appId())
+            .thenReturn("appId");
         when(threadsAuthProperties.appSecret())
             .thenReturn("appSecret");
+        when(threadsAuthProperties.redirectUri())
+            .thenReturn("redirectUri");
     }
 
     @Test
-    void testGetToken() {
+    void testGetAccessToken() {
+        when(threadsApiHttpClient.getExchangeToken(anyString(), anyString(), anyString(), anyString(), anyString()))
+            .thenReturn(Mono.just(tokenResponse()));
         when(threadsApiHttpClient.getAccessToken(anyString(), anyString(), anyString()))
             .thenReturn(Mono.just(tokenResponse()));
         when(abstractTokenSaver.save(any(), anyString()))
             .thenReturn(Mono.just(""));
+        when(accessTokenFlowHook.doAfter())
+            .thenReturn(Mono.just(""));
 
-        Mono<String> result = threadsAccessTokenFlow.getToken("exchangeToken");
+        Mono<String> result = threadsAccessTokenFlow.getAccessToken("exchangeToken");
 
         create(result)
-            .expectNext("")
+            .expectNext("SUCCESS")
             .verifyComplete();
     }
 
     @Test
-    void testGetTokenWhenExceptionOccurred() {
-        when(threadsApiHttpClient.getAccessToken(anyString(), anyString(), anyString()))
+    void testGetAccessTokenWhenExceptionOccurred() {
+        when(threadsApiHttpClient.getExchangeToken(anyString(), anyString(), anyString(), anyString(), anyString()))
             .thenReturn(Mono.error(new RuntimeException()));
+        when(accessTokenFlowHook.handleException(any()))
+            .thenReturn(Mono.just(""));
 
-        Mono<String> result = threadsAccessTokenFlow.getToken("exchangeToken");
+        Mono<String> result = threadsAccessTokenFlow.getAccessToken("exchangeToken");
 
         create(result)
-            .verifyErrorMatches(throwable -> throwable.getClass().equals(ThreadsAccessTokenFlowException.class));
+            .expectNext("")
+            .verifyComplete();
     }
 
     private static TokenResponse tokenResponse() {

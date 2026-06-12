@@ -1,9 +1,13 @@
 package com.pluxurydolo.threads.flow.oauth;
 
 import com.pluxurydolo.threads.properties.ThreadsAuthProperties;
+import org.springframework.http.server.reactive.ServerHttpResponse;
+import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+
+import static org.springframework.http.HttpStatus.FOUND;
 
 public class ThreadsAuthorizationCodeFlow {
     private final ThreadsAuthProperties threadsAuthProperties;
@@ -12,7 +16,17 @@ public class ThreadsAuthorizationCodeFlow {
         this.threadsAuthProperties = threadsAuthProperties;
     }
 
-    public URI getAuthorizationUri() {
+    public ServerHttpResponse getResponse(ServerWebExchange serverWebExchange) {
+        URI authorizationUri = getAuthorizationUri();
+
+        ServerHttpResponse response = serverWebExchange.getResponse();
+        response.setStatusCode(FOUND);
+        response.getHeaders().setLocation(authorizationUri);
+
+        return response;
+    }
+
+    private URI getAuthorizationUri() {
         String appId = threadsAuthProperties.appId();
         String redirectUri = threadsAuthProperties.redirectUri();
         String scope = "threads_basic,threads_content_publish";

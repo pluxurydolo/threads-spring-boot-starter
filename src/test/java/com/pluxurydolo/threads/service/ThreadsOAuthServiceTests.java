@@ -1,27 +1,19 @@
 package com.pluxurydolo.threads.service;
 
-import com.pluxurydolo.threads.dto.ThreadsTokens;
-import com.pluxurydolo.threads.dto.response.TokenResponse;
 import com.pluxurydolo.threads.flow.oauth.ThreadsAccessTokenFlow;
 import com.pluxurydolo.threads.flow.oauth.ThreadsAuthorizationCodeFlow;
-import com.pluxurydolo.threads.flow.oauth.ThreadsExchangeTokenFlow;
 import com.pluxurydolo.threads.flow.oauth.ThreadsRefreshTokenFlow;
-import com.pluxurydolo.threads.token.AbstractTokenRetriever;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
-import java.net.URI;
-
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static reactor.test.StepVerifier.create;
 
@@ -32,16 +24,10 @@ class ThreadsOAuthServiceTests {
     private ThreadsAuthorizationCodeFlow threadsAuthorizationCodeFlow;
 
     @Mock
-    private ThreadsExchangeTokenFlow threadsExchangeTokenFlow;
-
-    @Mock
     private ThreadsAccessTokenFlow threadsAccessTokenFlow;
 
     @Mock
     private ThreadsRefreshTokenFlow threadsRefreshTokenFlow;
-
-    @Mock
-    private AbstractTokenRetriever abstractTokenRetriever;
 
     @Mock
     private ServerWebExchange serverWebExchange;
@@ -49,24 +35,13 @@ class ThreadsOAuthServiceTests {
     @Mock
     private ServerHttpResponse serverHttpResponse;
 
-    @Mock
-    private HttpHeaders httpHeaders;
-
     @InjectMocks
     private ThreadsOAuthService threadsOAuthService;
 
     @Test
     void testLogin() {
-        doNothing()
-            .when(httpHeaders).setLocation(any());
-        when(threadsAuthorizationCodeFlow.getAuthorizationUri())
-            .thenReturn(URI.create("authorizationUrl"));
-        when(serverWebExchange.getResponse())
+        when(threadsAuthorizationCodeFlow.getResponse(any()))
             .thenReturn(serverHttpResponse);
-        when(serverHttpResponse.setStatusCode(any()))
-            .thenReturn(true);
-        when(serverHttpResponse.getHeaders())
-            .thenReturn(httpHeaders);
         when(serverHttpResponse.setComplete())
             .thenReturn(Mono.empty());
 
@@ -78,9 +53,7 @@ class ThreadsOAuthServiceTests {
 
     @Test
     void testRedirect() {
-        when(threadsExchangeTokenFlow.getToken(anyString()))
-            .thenReturn(Mono.just(tokenResponse()));
-        when(threadsAccessTokenFlow.getToken(anyString()))
+        when(threadsAccessTokenFlow.getAccessToken(anyString()))
             .thenReturn(Mono.just(""));
 
 
@@ -93,9 +66,7 @@ class ThreadsOAuthServiceTests {
 
     @Test
     void testRefreshToken() {
-        when(abstractTokenRetriever.retrieve())
-            .thenReturn(Mono.just(threadsTokens()));
-        when(threadsRefreshTokenFlow.refreshToken(anyString()))
+        when(threadsRefreshTokenFlow.refreshToken())
             .thenReturn(Mono.just(""));
 
         Mono<String> result = threadsOAuthService.refreshToken();
@@ -103,13 +74,5 @@ class ThreadsOAuthServiceTests {
         create(result)
             .expectNext("")
             .verifyComplete();
-    }
-
-    private static TokenResponse tokenResponse() {
-        return new TokenResponse("accessToken", "tokenType", 1, 1L, "error", "errorDescription", "errorType");
-    }
-
-    private static ThreadsTokens threadsTokens() {
-        return new ThreadsTokens("exchangeToken", "accessToken");
     }
 }

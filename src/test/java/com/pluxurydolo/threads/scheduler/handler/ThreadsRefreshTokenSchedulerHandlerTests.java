@@ -1,9 +1,6 @@
 package com.pluxurydolo.threads.scheduler.handler;
 
-import com.pluxurydolo.threads.dto.ThreadsTokens;
-import com.pluxurydolo.threads.scheduler.hook.RefreshTokenSchedulerHandlerHook;
 import com.pluxurydolo.threads.flow.oauth.ThreadsRefreshTokenFlow;
-import com.pluxurydolo.threads.token.AbstractTokenRetriever;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -11,8 +8,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import reactor.core.publisher.Mono;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static reactor.test.StepVerifier.create;
 
@@ -22,22 +17,12 @@ class ThreadsRefreshTokenSchedulerHandlerTests {
     @Mock
     private ThreadsRefreshTokenFlow threadsRefreshTokenFlow;
 
-    @Mock
-    private AbstractTokenRetriever abstractTokenRetriever;
-
-    @Mock
-    private RefreshTokenSchedulerHandlerHook refreshTokenSchedulerHandlerHook;
-
     @InjectMocks
     private ThreadsRefreshTokenSchedulerHandler threadsRefreshTokenSchedulerHandler;
 
     @Test
     void testHandle() {
-        when(abstractTokenRetriever.retrieve())
-            .thenReturn(Mono.just(threadsTokens()));
-        when(threadsRefreshTokenFlow.refreshToken(anyString()))
-            .thenReturn(Mono.just(""));
-        when(refreshTokenSchedulerHandlerHook.doAfter())
+        when(threadsRefreshTokenFlow.refreshToken())
             .thenReturn(Mono.just(""));
 
         Mono<String> result = threadsRefreshTokenSchedulerHandler.handle("jobName");
@@ -49,21 +34,12 @@ class ThreadsRefreshTokenSchedulerHandlerTests {
 
     @Test
     void testHandleWhenExceptionOccurred() {
-        when(abstractTokenRetriever.retrieve())
-            .thenReturn(Mono.just(threadsTokens()));
-        when(threadsRefreshTokenFlow.refreshToken(anyString()))
+        when(threadsRefreshTokenFlow.refreshToken())
             .thenReturn(Mono.error(new RuntimeException()));
-        when(refreshTokenSchedulerHandlerHook.handleException(any(), anyString()))
-            .thenReturn(Mono.just(""));
 
         Mono<String> result = threadsRefreshTokenSchedulerHandler.handle("jobName");
 
         create(result)
-            .expectNext("")
-            .verifyComplete();
-    }
-
-    private static ThreadsTokens threadsTokens() {
-        return new ThreadsTokens("exchangeToken", "accessToken");
+            .verifyErrorMatches(throwable -> throwable.getClass().equals(RuntimeException.class));
     }
 }
