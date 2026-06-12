@@ -18,8 +18,8 @@ import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpStatus.TOO_MANY_REQUESTS;
 
 @ExtendWith(MockitoExtension.class)
-class ConcurrencyLimitAdviceTests {
-    private static final ConcurrencyLimitAdvice ADVICE = new ConcurrencyLimitAdvice(clock());
+class ThreadsConcurrencyLimitAdviceTests {
+    private static final ThreadsConcurrencyLimitAdvice ADVICE = new ThreadsConcurrencyLimitAdvice(clock());
 
     @Mock
     private ServerWebExchange serverWebExchange;

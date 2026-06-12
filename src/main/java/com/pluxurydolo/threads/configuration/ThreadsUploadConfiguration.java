@@ -3,9 +3,9 @@ package com.pluxurydolo.threads.configuration;
 import com.pluxurydolo.threads.flow.publish.ThreadsContainerPublisher;
 import com.pluxurydolo.threads.flow.publish.ThreadsContainerStatusPoller;
 import com.pluxurydolo.threads.flow.publish.image.ThreadsImageContainerCreator;
-import com.pluxurydolo.threads.flow.publish.image.ThreadsImageUploader;
+import com.pluxurydolo.threads.flow.publish.image.ThreadsImagePublisher;
 import com.pluxurydolo.threads.flow.publish.video.ThreadsVideoContainerCreator;
-import com.pluxurydolo.threads.flow.publish.video.ThreadsVideoUploader;
+import com.pluxurydolo.threads.flow.publish.video.ThreadsVideoPublisher;
 import com.pluxurydolo.threads.properties.ThreadsAuthProperties;
 import com.pluxurydolo.threads.properties.ThreadsPollingProperties;
 import com.pluxurydolo.threads.token.AbstractTokenRetriever;
@@ -19,14 +19,14 @@ public class ThreadsUploadConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public ThreadsImageUploader threadsImageSender(
+    public ThreadsImagePublisher threadsImagePublisher(
         ThreadsImageContainerCreator threadsImageContainerCreator,
         ThreadsContainerStatusPoller threadsContainerStatusPoller,
         ThreadsContainerPublisher threadsContainerPublisher,
         AbstractTokenRetriever abstractTokenRetriever,
         ThreadsAuthProperties threadsAuthProperties
     ) {
-        return new ThreadsImageUploader(
+        return new ThreadsImagePublisher(
             threadsImageContainerCreator,
             threadsContainerStatusPoller,
             threadsContainerPublisher,
@@ -37,14 +37,14 @@ public class ThreadsUploadConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public ThreadsVideoUploader threadsVideoSender(
+    public ThreadsVideoPublisher threadsVideoPublisher(
         ThreadsVideoContainerCreator threadsVideoContainerCreator,
         ThreadsContainerStatusPoller threadsContainerStatusPoller,
         ThreadsContainerPublisher threadsContainerPublisher,
         AbstractTokenRetriever abstractTokenRetriever,
         ThreadsAuthProperties threadsAuthProperties
     ) {
-        return new ThreadsVideoUploader(
+        return new ThreadsVideoPublisher(
             threadsVideoContainerCreator,
             threadsContainerStatusPoller,
             threadsContainerPublisher,

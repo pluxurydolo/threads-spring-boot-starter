@@ -1,7 +1,7 @@
-package com.pluxurydolo.threads.flow.publish.video;
+package com.pluxurydolo.threads.flow.publish.image;
 
 import com.pluxurydolo.threads.dto.ThreadsTokens;
-import com.pluxurydolo.threads.dto.request.UploadMediaRequest;
+import com.pluxurydolo.threads.dto.request.PublishMediaRequest;
 import com.pluxurydolo.threads.dto.response.CreateContainerResponse;
 import com.pluxurydolo.threads.dto.response.ErrorDetails;
 import com.pluxurydolo.threads.dto.response.PublishContainerResponse;
@@ -22,10 +22,10 @@ import static org.mockito.Mockito.when;
 import static reactor.test.StepVerifier.create;
 
 @ExtendWith(MockitoExtension.class)
-class ThreadsVideoUploaderTests {
+class ThreadsImagePublisherTests {
 
     @Mock
-    private ThreadsVideoContainerCreator threadsVideoContainerCreator;
+    private ThreadsImageContainerCreator threadsImageContainerCreator;
 
     @Mock
     private ThreadsContainerStatusPoller threadsContainerStatusPoller;
@@ -40,7 +40,7 @@ class ThreadsVideoUploaderTests {
     private ThreadsAuthProperties threadsAuthProperties;
 
     @InjectMocks
-    private ThreadsVideoUploader threadsVideoUploader;
+    private ThreadsImagePublisher threadsImagePublisher;
 
     @BeforeEach
     void setUp() {
@@ -49,17 +49,17 @@ class ThreadsVideoUploaderTests {
     }
 
     @Test
-    void testUpload() {
+    void testPublish() {
         when(abstractTokenRetriever.retrieve())
             .thenReturn(Mono.just(threadsTokens()));
-        when(threadsVideoContainerCreator.create(any()))
+        when(threadsImageContainerCreator.create(any()))
             .thenReturn(Mono.just(createContainerResponse()));
         when(threadsContainerStatusPoller.poll(any()))
             .thenReturn(Mono.just(""));
         when(threadsContainerPublisher.publish(any()))
             .thenReturn(Mono.just(publishContainerResponse()));
 
-        Mono<String> result = threadsVideoUploader.upload(uploadMediaRequest());
+        Mono<String> result = threadsImagePublisher.publish(publishMediaRequest());
 
         create(result)
             .expectNext("id")
@@ -67,18 +67,20 @@ class ThreadsVideoUploaderTests {
     }
 
     @Test
-    void testUploadWhenExceptionOccurred() {
+    void testPublishWhenExceptionOccurred() {
         when(abstractTokenRetriever.retrieve())
+            .thenReturn(Mono.just(threadsTokens()));
+        when(threadsImageContainerCreator.create(any()))
             .thenReturn(Mono.error(new RuntimeException()));
 
-        Mono<String> result = threadsVideoUploader.upload(uploadMediaRequest());
+        Mono<String> result = threadsImagePublisher.publish(publishMediaRequest());
 
         create(result)
             .verifyErrorMatches(throwable -> throwable.getClass().equals(RuntimeException.class));
     }
 
-    private static UploadMediaRequest uploadMediaRequest() {
-        return new UploadMediaRequest("mediaUrl", "caption");
+    private static PublishMediaRequest publishMediaRequest() {
+        return new PublishMediaRequest("mediaUrl", "caption");
     }
 
     private static ThreadsTokens threadsTokens() {

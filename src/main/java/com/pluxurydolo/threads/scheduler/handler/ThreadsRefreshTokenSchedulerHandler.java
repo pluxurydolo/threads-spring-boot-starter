@@ -1,8 +1,8 @@
 package com.pluxurydolo.threads.scheduler.handler;
 
 import com.pluxurydolo.threads.dto.ThreadsTokens;
-import com.pluxurydolo.threads.scheduler.hook.RefreshTokenSchedulerHandlerHook;
 import com.pluxurydolo.threads.flow.oauth.ThreadsRefreshTokenFlow;
+import com.pluxurydolo.threads.scheduler.hook.RefreshTokenSchedulerHandlerHook;
 import com.pluxurydolo.threads.token.AbstractTokenRetriever;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +34,7 @@ public class ThreadsRefreshTokenSchedulerHandler {
             .flatMap(_ -> refreshTokenSchedulerHandlerHook.doAfter())
             .doOnSuccess(_ -> LOGGER.info("bgmk [threads-starter] Джоба {} успешно завершена", jobName))
             .onErrorResume(throwable -> {
-                LOGGER.error("itet [threads-starter] Джоба {} успешно завершена", jobName);
+                LOGGER.error("itet [threads-starter] Произошла ошибка при завершении джобы {}", jobName);
                 return refreshTokenSchedulerHandlerHook.handleException(throwable, jobName);
             });
     }

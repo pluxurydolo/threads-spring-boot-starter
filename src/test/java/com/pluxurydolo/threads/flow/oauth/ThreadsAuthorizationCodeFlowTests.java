@@ -7,6 +7,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.net.URI;
+
+import static java.net.URI.create;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
@@ -20,15 +23,19 @@ class ThreadsAuthorizationCodeFlowTests {
     private ThreadsAuthorizationCodeFlow threadsAuthorizationCodeFlow;
 
     @Test
-    void testGetAuthorizationUrl() {
+    void testGetAuthorizationUri() {
         when(threadsAuthProperties.appId())
             .thenReturn("appId");
         when(threadsAuthProperties.redirectUri())
             .thenReturn("redirectUri");
 
-        String result = threadsAuthorizationCodeFlow.getAuthorizationUrl();
+        URI result = threadsAuthorizationCodeFlow.getAuthorizationUri();
 
         assertThat(result)
-            .isEqualTo("https://threads.net/oauth/authorize?client_id=appId&redirect_uri=redirectUri&scope=threads_basic,threads_content_publish&response_type=code");
+            .isEqualTo(uri());
+    }
+
+    private static URI uri() {
+        return create("https://threads.net/oauth/authorize?client_id=appId&redirect_uri=redirectUri&scope=threads_basic,threads_content_publish&response_type=code");
     }
 }

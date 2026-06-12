@@ -15,12 +15,12 @@ import static org.springframework.http.HttpStatus.TOO_MANY_REQUESTS;
 import static org.springframework.http.ProblemDetail.forStatusAndDetail;
 
 @RestControllerAdvice
-public class ConcurrencyLimitAdvice {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ConcurrencyLimitAdvice.class);
+public class ThreadsConcurrencyLimitAdvice {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ThreadsConcurrencyLimitAdvice.class);
 
     private final Clock clock;
 
-    public ConcurrencyLimitAdvice(Clock clock) {
+    public ThreadsConcurrencyLimitAdvice(Clock clock) {
         this.clock = clock;
     }
 
@@ -31,11 +31,12 @@ public class ConcurrencyLimitAdvice {
         String timestamp = now(clock)
             .toString();
 
-        LOGGER.warn("bhyt [threads-starter] Превышен лимит запросов по пути {} {}", path, timestamp);
+        LOGGER.warn("gcsb [threads-starter] Превышен лимит запросов по пути {} {}", path, timestamp);
 
         ProblemDetail problemDetail = forStatusAndDetail(TOO_MANY_REQUESTS, "Лимит запросов исчерпан");
         problemDetail.setTitle("Too Many Requests");
         problemDetail.setProperty("timestamp", timestamp);
+
         return problemDetail;
     }
 }

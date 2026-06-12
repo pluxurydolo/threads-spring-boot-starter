@@ -4,7 +4,7 @@ import com.pluxurydolo.threads.dto.ThreadsTokens;
 import com.pluxurydolo.threads.dto.request.ContainerStatusRequest;
 import com.pluxurydolo.threads.dto.request.CreateContainerRequest;
 import com.pluxurydolo.threads.dto.request.PublishContainerRequest;
-import com.pluxurydolo.threads.dto.request.UploadMediaRequest;
+import com.pluxurydolo.threads.dto.request.PublishMediaRequest;
 import com.pluxurydolo.threads.dto.response.CreateContainerResponse;
 import com.pluxurydolo.threads.dto.response.PublishContainerResponse;
 import com.pluxurydolo.threads.properties.ThreadsAuthProperties;
@@ -13,14 +13,14 @@ import com.pluxurydolo.threads.flow.publish.ThreadsContainerStatusPoller;
 import com.pluxurydolo.threads.token.AbstractTokenRetriever;
 import reactor.core.publisher.Mono;
 
-public class ThreadsVideoUploader {
+public class ThreadsVideoPublisher {
     private final ThreadsVideoContainerCreator threadsVideoContainerCreator;
     private final ThreadsContainerStatusPoller threadsContainerStatusPoller;
     private final ThreadsContainerPublisher threadsContainerPublisher;
     private final AbstractTokenRetriever abstractTokenRetriever;
     private final ThreadsAuthProperties threadsAuthProperties;
 
-    public ThreadsVideoUploader(
+    public ThreadsVideoPublisher(
         ThreadsVideoContainerCreator threadsVideoContainerCreator,
         ThreadsContainerStatusPoller threadsContainerStatusPoller,
         ThreadsContainerPublisher threadsContainerPublisher,
@@ -34,18 +34,18 @@ public class ThreadsVideoUploader {
         this.threadsAuthProperties = threadsAuthProperties;
     }
 
-    public Mono<String> upload(UploadMediaRequest request) {
+    public Mono<String> publish(PublishMediaRequest request) {
         String videoUrl = request.mediaUrl();
         String caption = request.caption();
         String userId = threadsAuthProperties.userId();
 
         return abstractTokenRetriever.retrieve()
             .map(ThreadsTokens::accessToken)
-            .flatMap(accessToken -> uploadVideo(videoUrl, caption, userId, accessToken))
+            .flatMap(accessToken -> publishVideo(videoUrl, caption, userId, accessToken))
             .map(PublishContainerResponse::id);
     }
 
-    private Mono<PublishContainerResponse> uploadVideo(String videoUrl, String caption, String userId, String accessToken) {
+    private Mono<PublishContainerResponse> publishVideo(String videoUrl, String caption, String userId, String accessToken) {
         CreateContainerRequest request = new CreateContainerRequest(videoUrl, caption, userId, accessToken);
 
         return threadsVideoContainerCreator.create(request)

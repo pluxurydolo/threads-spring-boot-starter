@@ -1,8 +1,8 @@
 package com.pluxurydolo.threads.client;
 
-import com.pluxurydolo.threads.dto.request.UploadMediaRequest;
-import com.pluxurydolo.threads.exception.ThreadsVideoUploadException;
-import com.pluxurydolo.threads.flow.publish.video.ThreadsVideoUploader;
+import com.pluxurydolo.threads.dto.request.PublishMediaRequest;
+import com.pluxurydolo.threads.exception.ThreadsVideoPublicationException;
+import com.pluxurydolo.threads.flow.publish.video.ThreadsVideoPublisher;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -18,17 +18,17 @@ import static reactor.test.StepVerifier.create;
 class ThreadsVideoClientTests {
 
     @Mock
-    private ThreadsVideoUploader threadsVideoUploader;
+    private ThreadsVideoPublisher threadsVideoPublisher;
 
     @InjectMocks
     private ThreadsVideoClient threadsVideoClient;
 
     @Test
-    void testUploadVideo() {
-        when(threadsVideoUploader.upload(any()))
+    void testPublishVideo() {
+        when(threadsVideoPublisher.publish(any()))
             .thenReturn(Mono.just(""));
 
-        Mono<String> result = threadsVideoClient.uploadVideo(uploadMediaRequest());
+        Mono<String> result = threadsVideoClient.publishVideo(uploadMediaRequest());
 
         create(result)
             .expectNext("")
@@ -36,17 +36,17 @@ class ThreadsVideoClientTests {
     }
 
     @Test
-    void testUploadVideoWhenExceptionOccurred() {
-        when(threadsVideoUploader.upload(any()))
+    void testPublishVideoWhenExceptionOccurred() {
+        when(threadsVideoPublisher.publish(any()))
             .thenReturn(Mono.error(new RuntimeException()));
 
-        Mono<String> result = threadsVideoClient.uploadVideo(uploadMediaRequest());
+        Mono<String> result = threadsVideoClient.publishVideo(uploadMediaRequest());
 
         create(result)
-            .verifyErrorMatches(throwable -> throwable.getClass().equals(ThreadsVideoUploadException.class));
+            .verifyErrorMatches(throwable -> throwable.getClass().equals(ThreadsVideoPublicationException.class));
     }
 
-    private static UploadMediaRequest uploadMediaRequest() {
-        return new UploadMediaRequest("mediaUrl", "caption");
+    private static PublishMediaRequest uploadMediaRequest() {
+        return new PublishMediaRequest("mediaUrl", "caption");
     }
 }

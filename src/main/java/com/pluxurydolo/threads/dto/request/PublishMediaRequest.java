@@ -1,6 +1,6 @@
 package com.pluxurydolo.threads.dto.request;
 
-public record UploadMediaRequest(
+public record PublishMediaRequest(
     String mediaUrl,
     String caption
 ) {

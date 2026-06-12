@@ -14,7 +14,6 @@ import reactor.core.scheduler.Schedulers;
 
 import java.net.URI;
 
-import static java.net.URI.create;
 import static org.springframework.http.HttpStatus.FOUND;
 
 public class ThreadsOAuthService {
@@ -39,12 +38,11 @@ public class ThreadsOAuthService {
     }
 
     public Mono<Void> login(ServerWebExchange serverWebExchange) {
-        String authorizationUrl = threadsAuthorizationCodeFlow.getAuthorizationUrl();
-        URI uri = create(authorizationUrl);
+        URI authorizationUri = threadsAuthorizationCodeFlow.getAuthorizationUri();
 
         ServerHttpResponse response = serverWebExchange.getResponse();
         response.setStatusCode(FOUND);
-        response.getHeaders().setLocation(uri);
+        response.getHeaders().setLocation(authorizationUri);
 
         return response.setComplete();
     }
