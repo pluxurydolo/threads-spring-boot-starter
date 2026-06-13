@@ -15,7 +15,10 @@ import static org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED_VAL
 @HttpExchange(url = "https://graph.threads.net")
 public interface ThreadsUploadHttpClient {
 
-    @PostExchange(url = "/v1.0/{userId}/threads", contentType = APPLICATION_FORM_URLENCODED_VALUE)
+    @PostExchange(
+        url = "/v1.0/{userId}/threads",
+        contentType = APPLICATION_FORM_URLENCODED_VALUE
+    )
     Mono<CreateContainerResponse> createImageContainer(
         @PathVariable String userId,
         @RequestParam("media_type") String mediaType,
@@ -24,7 +27,10 @@ public interface ThreadsUploadHttpClient {
         @RequestParam("text") String caption
     );
 
-    @PostExchange(url = "/v1.0/{userId}/threads", contentType = APPLICATION_FORM_URLENCODED_VALUE)
+    @PostExchange(
+        url = "/v1.0/{userId}/threads",
+        contentType = APPLICATION_FORM_URLENCODED_VALUE
+    )
     Mono<CreateContainerResponse> createVideoContainer(
         @PathVariable String userId,
         @RequestParam("media_type") String mediaType,
@@ -33,14 +39,17 @@ public interface ThreadsUploadHttpClient {
         @RequestParam("text") String caption
     );
 
-    @PostExchange(url = "/v1.0/{userId}/threads_publish", contentType = APPLICATION_FORM_URLENCODED_VALUE)
+    @PostExchange(
+        url = "/v1.0/{userId}/threads_publish",
+        contentType = APPLICATION_FORM_URLENCODED_VALUE
+    )
     Mono<PublishContainerResponse> publishContainer(
         @PathVariable String userId,
         @RequestParam("creation_id") String containerId,
         @RequestParam("access_token") String accessToken
     );
 
-    @GetExchange(url = "/v1.0/{containerId}")
+    @GetExchange("/v1.0/{containerId}")
     Mono<ContainerStatusResponse> getContainerStatus(
         @PathVariable String containerId,
         @RequestParam("fields") String fields,
