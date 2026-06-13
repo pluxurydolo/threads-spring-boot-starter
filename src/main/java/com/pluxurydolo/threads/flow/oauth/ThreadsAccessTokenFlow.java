@@ -50,7 +50,7 @@ public class ThreadsAccessTokenFlow {
 
     private Mono<String> updateTokens(TokenResponse tokenResponse) {
         String appSecret = threadsAuthProperties.appSecret();
-        String grantType = "authorization_code";
+        String grantType = "th_exchange_token";
 
         String exchangeToken = tokenResponse.accessToken();
 
