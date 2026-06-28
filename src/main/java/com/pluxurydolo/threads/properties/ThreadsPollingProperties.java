@@ -7,11 +7,7 @@ import java.time.Duration;
 
 @ConfigurationProperties(prefix = "threads.polling")
 public record ThreadsPollingProperties(
-
-    @Name("max-repeat")
-    int maxRepeat,
-
-    @Name("delay")
-    Duration delay
+    @Name("max-repeat") int maxRepeat,
+    @Name("delay") Duration delay
 ) {
 }
